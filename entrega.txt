@@ -1,0 +1,54 @@
+- Descrição geral:
+ Produza pelo menos um dos domínios da sua solução tecnológica proposta utilizando conceitos de
+Java e Spring.
+ A solução deverá ser capaz de persistir, manter e consultar os dados em um SGBD Relacional
+(preferencialmente Oracle). Os dados gerados por meio da solução de TI proposta pela equipe será
+primordial para atender as solicitações do cliente.
+JAVA ADVANCED (2/5)- Solicitação:
+ Dentro do contexto apresentado, a equipe deverá:
+ ❑ Criar uma aplicação Java com Spring Boot que ajude a resolver um problema dentro do contexto
+apresentado (utilize a criatividade);
+ ❑ A aplicação deverá respeitar os fundamentos da Programação Orientada a Objetos (POO) e as classes
+de entidade deverão estar relacionadas e mapeadas com JPA;
+ ❑Garantir que o código que respeite a coesão e o desacoplamento;
+ ❑Usoadequadode padrões de projeto e validação funcional;
+ ❑Respeitar os conceitos fundamentais da construção de APIs REST (RESTful);
+JAVA ADVANCED (3/5)- Solicitação:
+ Dentro do contexto apresentado, a equipe deverá:
+ ❑Na primeira Sprint, a API deverá estar de acordo com o modelo de maturidade nível 1;
+ ❑Utilizar os Design Patterns com prudência, Repository com Generics quando necessário;
+ ❑Poderá utilizar a JPQL e/ou Spring JPA Query Methods.
+ ❑Todos os artefatos produzidos deverão estar no Github público e os professores deverão ter acesso ao
+repositório.
+ ❑Apresentar os testes dos endpoints da API (utilize o Postman ou Insomnia).
+Exporte as requisições para que o professor possa validar o funcionamento.
+JAVA ADVANCED (4/5)- Distribuição da pontuação:
+ a) (até 5 Pontos) Apresentar o cronograma de desenvolvimento e respeitar os prazos. Crie um o
+documento dizendo quem fará o que e quando a atividade deverá ser ou foi realizada;
+ b) (até 10 Pontos) Imagens explicativas da arquitetura, definição das classes de domínio da
+aplicação  e  o  respectivo  Diagrama  de  Classes  de  Entidade.  O  Diagrama  de  Entidade  e
+Relacionamento (DER) e o Diagrama de Classe das Entidades deverão ser coerentes. Se necessário
+faça uma breve explicação sobre os relacionamentos e as constraints envolvidas;
+ c) (até 40 Pontos) Implementação das classes de Entidade necessárias para solução do problema
+que se propõe resolver. Atenção ao correto encapsulamento, à tipagem dos atributos e ao
+Mapeamento Objeto Relacional com JPA e Hibernate (A equipe deverá demonstrar a cada Sprint que
+houve evolução em relação à sprint anterior);
+ d) (até 15 Pontos) A aplicação respeita os conceitos fundamentais do REST criados por Roy Fielding
+(RESTful) e API está de acordo com o modelo de maturidade nível 1 proposto por Leonard
+Richardson;
+JAVA ADVANCED (5/5)- Distribuição da pontuação:
+ e)(até 10 Pontos) A Gestão de Configuração dos Artefatos de Software foram demonstrados
+pela equipe. Ou seja, todos os artefatos produzidos estão no Github e os professores têm
+acesso ao repositório;
+ f) (até 10 pontos) Envio do link para o projeto público compartilhado no Github contendo
+entre outros: 1) Toda documentação; 2) Código-fonte; 3) Arquivo README.md com texto
+contendo: 3.1) Nome da aplicação; 3.2) Nome completo e breve apresentação dos integrantes
+do Grupo (atividade da qual ficou responsável no projeto); 3.3) instrução de como rodar a
+aplicação; 3.4) imagem dos diagramas; 3.5) link para vídeo apresentando a Proposta
+Tecnológica, o público-alvo da aplicação e os problemas que a aplicação se propõe a
+solucionar; 3.6) Listagem de todos os endpoints (documentação da API com swagger / Open
+ API);
+ g)(até 10 pontos) Se a equipe demonstrou preocupação em testar a aplicação e provou
+com documentos. Disponibilizou arquivos para que o professor seja capaz de realizar teste dos
+endpoints e houve, após os testes, a perfeita persistência e recuperação dos dados. (exporte do
+Postman ou do Insomnia as requisições aos endpoints). Inclua na pasta documentos do projeto

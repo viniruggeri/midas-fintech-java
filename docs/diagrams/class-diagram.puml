@@ -1,0 +1,132 @@
+@startuml Class_Diagram_Midas_API
+
+package "Entity Layer" {
+    class Account {
+        - id: Long
+        - nome: String
+        - saldo: BigDecimal
+        - transactions: List<Transaction>
+        + getId(): Long
+        + setId(id: Long): void
+        + getNome(): String
+        + setNome(nome: String): void
+        + getSaldo(): BigDecimal
+        + setSaldo(saldo: BigDecimal): void
+    }
+
+    class Transaction {
+        - id: Long
+        - valor: BigDecimal
+        - data: LocalDateTime
+        - tipo: TransactionType
+        - descricao: String
+        - account: Account
+        + getId(): Long
+        + setId(id: Long): void
+        + getValor(): BigDecimal
+        + setValor(valor: BigDecimal): void
+        + getData(): LocalDateTime
+        + setData(data: LocalDateTime): void
+        + getTipo(): TransactionType
+        + setTipo(tipo: TransactionType): void
+    }
+
+    enum TransactionType {
+        RECEITA
+        DESPESA
+    }
+}
+
+package "Repository Layer" {
+    interface BaseRepository<T, ID> {
+        + save(entity: T): T
+        + findById(id: ID): Optional<T>
+        + findAll(): List<T>
+        + deleteById(id: ID): void
+    }
+
+    interface AccountRepository {
+        + findByNome(nome: String): Optional<Account>
+    }
+
+    interface TransactionRepository {
+        + findByAccountId(accountId: Long): List<Transaction>
+        + findByAccountIdAndDataBetween(accountId: Long, start: LocalDateTime, end: LocalDateTime): List<Transaction>
+    }
+}
+
+package "Service Layer" {
+    interface AccountService {
+        + save(account: Account): Account
+        + findById(id: Long): Optional<Account>
+        + findAll(): List<Account>
+        + update(id: Long, account: Account): Account
+        + deleteById(id: Long): void
+    }
+
+    class AccountServiceImpl {
+        - accountRepository: AccountRepository
+        + save(account: Account): Account
+        + findById(id: Long): Optional<Account>
+        + update(id: Long, account: Account): Account
+        + deleteById(id: Long): void
+    }
+
+    interface TransactionService {
+        + save(transaction: Transaction): Transaction
+        + findById(id: Long): Optional<Transaction>
+        + findAll(): List<Transaction>
+        + update(id: Long, transaction: Transaction): Transaction
+        + deleteById(id: Long): void
+    }
+
+    class TransactionServiceImpl {
+        - transactionRepository: TransactionRepository
+        - accountRepository: AccountRepository
+        + save(transaction: Transaction): Transaction
+        + findById(id: Long): Optional<Transaction>
+        + update(id: Long, transaction: Transaction): Transaction
+        + deleteById(id: Long): void
+    }
+}
+
+package "Controller Layer" {
+    class AccountController {
+        - accountService: AccountService
+        + createAccount(requestDto: AccountRequestDto): ResponseEntity
+        + getAllAccounts(): ResponseEntity
+        + getAccountById(id: Long): ResponseEntity
+        + updateAccount(id: Long, requestDto: AccountRequestDto): ResponseEntity
+        + deleteAccount(id: Long): ResponseEntity
+    }
+
+    class TransactionController {
+        - transactionService: TransactionService
+        - accountService: AccountService
+        + createTransaction(requestDto: TransactionRequestDto): ResponseEntity
+        + getAllTransactions(): ResponseEntity
+        + getTransactionById(id: Long): ResponseEntity
+        + updateTransaction(id: Long, requestDto: TransactionRequestDto): ResponseEntity
+        + deleteTransaction(id: Long): ResponseEntity
+    }
+}
+
+' Relationships
+Account ||--o{ Transaction : "1 para N"
+Transaction ||-- TransactionType : "usa"
+
+BaseRepository <|-- AccountRepository : "extends"
+BaseRepository <|-- TransactionRepository : "extends"
+
+AccountService <|.. AccountServiceImpl : "implements"
+TransactionService <|.. TransactionServiceImpl : "implements"
+
+AccountServiceImpl --> AccountRepository : "usa"
+TransactionServiceImpl --> TransactionRepository : "usa"
+TransactionServiceImpl --> AccountRepository : "usa"
+
+AccountController --> AccountService : "usa"
+TransactionController --> TransactionService : "usa"
+TransactionController --> AccountService : "usa"
+
+@enduml
