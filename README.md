@@ -2,7 +2,7 @@
 
 API REST desenvolvida em Java com Spring Boot para gestão financeira pessoal, atendendo aos requisitos da Sprint Java Advanced da FIAP.
 
-**🔗 Repositório GitHub:** [https://github.com/viniruggeri/midas-fintech-java](https://github.com/viniruggeri/midas-fintech-java)
+**🔗 Repositório GitHub:** [midas-fintech repo](https://github.com/viniruggeri/midas-fintech-java)
 
 ## 📋 Descrição do Problema
 
@@ -14,11 +14,11 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 
 ## 👥 Equipe
 
-| Nome | Função | RM | Responsabilidade no Projeto |
-|------|--------|-----|---------------------------|
-| **Vinicius** | Tech Lead / IA Engineer | [Seu RM] | Desenvolvimento Java/Spring Boot, Arquitetura da API, Serviços de IA com RAG |
-| **Barbara** | Cloud/QA Engineer | [RM Barbara] | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
-| **Yasmin** | Mobile/Backend Developer | [RM Yasmin] | Mobile Development, .NET Development, Integração com API |
+| Nome | Função | RM        | Responsabilidade no Projeto |
+|------|--------|-----------|---------------------------|
+| **Vinicius** | Tech Lead / IA Engineer | 560593    | Desenvolvimento Java/Spring Boot, Arquitetura da API, Serviços de IA com RAG |
+| **Barbara** | Cloud/QA Engineer | RM Barbara | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
+| **Yasmin** | Mobile/Backend Developer | RM Yasmin | Mobile Development, .NET Development, Integração com API |
 
 ## 🏗️ Arquitetura da Aplicação
 
@@ -38,7 +38,7 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 ```
 
 ### Padrões de Projeto Utilizados:
-- **Repository Pattern** com Generics (BaseRepository<T, ID>)
+- **Repository Pattern** com Generics (JpaRepository<T, ID>)
 - **Dependency Injection** (Spring IoC)
 - **MVC Pattern** (Model-View-Controller)
 - **DTO Pattern** (Data Transfer Objects)
@@ -84,7 +84,7 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 ### Execução em Desenvolvimento (H2):
 ```bash
 # Clone o repositório
-git clone [url-do-repositorio]
+git clone https://github.com/viniruggeri/midas-fintech-java.git
 cd midas-fintech-java
 
 # Execute com H2 em memória
@@ -93,8 +93,8 @@ cd midas-fintech-java
 
 ### Execução em Produção (Oracle):
 ```bash
-# Configure as variáveis de ambiente
-set ORACLE_URL=jdbc:oracle:thin:@localhost:1521:xe
+# Configure as variáveis de ambiente no `.env` 
+set ORACLE_URL=jdbc:oracle:thin:@//seu_host:1521/seu_servico
 set ORACLE_USER=seu_usuario
 set ORACLE_PASSWORD=sua_senha
 
@@ -102,8 +102,23 @@ set ORACLE_PASSWORD=sua_senha
 .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
+# Execute os endpoints via collection Postman/Insomnia:
+- Importe o arquivo `docs/midas-api-collection.json`
+- Teste todos os endpoints com exemplos de requisições
+- Valide a persistência e recuperação de dados
+- Verifique os status codes retornados
+- Confira a documentação Swagger para detalhes adicionais
+- Ajuste os dados conforme necessário para seus testes
+
+# Ou execute via test-api.http via HTTP Client do IntelliJ (versão paga):
+- Importe o arquivo `docs/midas-api-collection.http`
+- Teste todos os endpoints com exemplos de requisições
+- Valide a persistência e recuperação de dados
+- Verifique os status codes retornados
+- Confira a documentação Swagger para detalhes adicionais
+- Ajuste os dados conforme necessário para seus testes
 ### Acessos:
-- **API**: http://localhost:8080
+- **API**: http://localhost:8080/api
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **H2 Console**: http://localhost:8080/h2-console (dev only)
 
@@ -208,12 +223,6 @@ midas-fintech-java/
 
 ## 📄 Licença
 
-MIT License
+[Midas Fintech - Todos os direitos reservados](LICENSE)
 
-## 🤝 Contribuindo
-
-1. Fork do projeto
-2. Criar branch de feature
-3. Commit das alterações
-4. Push para a branch
-5. Abrir Pull Request
+#### © 2025 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados.

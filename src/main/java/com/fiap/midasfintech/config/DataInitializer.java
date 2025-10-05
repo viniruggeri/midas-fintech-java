@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+// este código foi gerado com a ajuda do claude ai
 public class DataInitializer implements CommandLineRunner {
 
     private final AccountRepository accountRepository;

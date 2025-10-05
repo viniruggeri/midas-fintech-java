@@ -31,7 +31,7 @@
   - Definição de relacionamentos (@OneToMany, @ManyToOne)
   - Validações Bean Validation
 - ✅ **Implementação dos Repositories com Generics**
-  - BaseRepository<T, ID> com padrão Repository
+  - JpaRepository<T, ID> com padrão Repository
   - Queries customizadas com Spring Data JPA
   - Métodos de busca específicos
 - ✅ **Services e Regras de Negócio**
@@ -54,7 +54,7 @@
   - Criação do Diagrama Entidade-Relacionamento (DER)
   - Definição de constraints e relacionamentos
   - Configuração Oracle Database para produção
-  - Scripts de inicialização (data.sql)
+  - Scripts de inicialização (DDL Query)
 - ✅ **Cloud Azure e DevOps**
   - Configuração do ambiente cloud
   - Setup de pipelines de CI/CD
@@ -97,22 +97,14 @@
 | M6 - Entrega Final | 10/10/2025 | Documentação Completa | Barbara | ✅ Entregue |
 
 ### 📊 **Evolução Demonstrada**
-
-**Sprint 1 (Atual - 26/09 a 10/10):**
+**Sprint 1 (26/09 a 10/10):**
 - ✅ Domínio básico implementado (Account + Transaction)
 - ✅ CRUD completo funcionando
 - ✅ Padrões de projeto aplicados corretamente
 - ✅ API REST Nível 1 Richardson implementada
 - ✅ Persistência Oracle + H2 configurada
 - ✅ Testes automatizados completos
-- ✅ Documentação e compliance verificados
-
-**Próximas Sprints (Planejado para evolução):**
-- Sprint 2: Implementar domínios adicionais (Goals, Categories)
-- Sprint 3: Melhorar para REST Nível 2 (HATEOAS)
-- Sprint 4: Integração com serviços de IA/RAG (Vinicius)
-- Sprint 5: Desenvolvimento da aplicação mobile (Yasmin)
-- Sprint 6: Integração com serviços .NET (Yasmin)
+- ✅ Documentação e compliance verificado
 
 ### ⚠️ **Riscos Gerenciados**
 
@@ -135,7 +127,7 @@
 - ✅ **Documentação**: README completo, diagramas, collection
 
 ---
-**Documento gerado em:** 01/10/2025  
+**Documento gerado em:** 05/10/2025  
 **Sprint:** 26/09/2025 - 10/10/2025  
 **Equipe:** Vinicius (Java/IA), Barbara (Cloud/QA/DB), Yasmin (Mobile/.NET)  
 **Versão:** 1.0

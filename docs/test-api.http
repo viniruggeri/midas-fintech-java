@@ -1,0 +1,88 @@
+@baseUrl = http://localhost:8080
+
+### Create Account
+POST {{baseUrl}}/api/accounts
+Content-Type: application/json
+
+{
+  "nome": "Conta Principal",
+  "saldo": 1000.00
+}
+
+> {% client.global.set("accountId", response.body.id); %}
+
+### Get All Accounts
+GET {{baseUrl}}/api/accounts
+
+### Get Account by ID
+GET {{baseUrl}}/api/accounts/{{accountId}}
+
+### Update Account
+PUT {{baseUrl}}/api/accounts/{{accountId}}
+Content-Type: application/json
+
+{
+  "nome": "Conta Principal Atualizada",
+  "saldo": 1500.00
+}
+
+### Delete Account
+DELETE {{baseUrl}}/api/accounts/{{accountId}}
+
+### Create Transaction - Receita
+POST {{baseUrl}}/api/transactions
+Content-Type: application/json
+
+{
+  "valor": 500.00,
+  "data": "2024-01-15T10:30:00",
+  "tipo": "RECEITA",
+  "descricao": "Salário mensal",
+  "accountId": {{accountId}}
+}
+
+> {% client.global.set("transactionId1", response.body.id); %}
+
+### Create Transaction - Despesa
+POST {{baseUrl}}/api/transactions
+Content-Type: application/json
+
+{
+  "valor": 150.00,
+  "data": "2024-01-16T14:20:00",
+  "tipo": "DESPESA",
+  "descricao": "Compras no supermercado",
+  "accountId": {{accountId}}
+}
+
+> {% client.global.set("transactionId2", response.body.id); %}
+
+### Get All Transactions
+GET {{baseUrl}}/api/transactions
+
+### Get Transaction by ID
+GET {{baseUrl}}/api/transactions/{{transactionId1}}
+
+### Get Transactions by Account ID
+GET {{baseUrl}}/api/transactions/account/{{accountId}}
+
+### Get Transactions by Account ID (Paged)
+GET {{baseUrl}}/api/transactions/account/{{accountId}}/paged?page=0&size=10&sort=data,desc
+
+### Update Transaction
+PUT {{baseUrl}}/api/transactions/{{transactionId1}}
+Content-Type: application/json
+
+{
+  "valor": 600.00,
+  "data": "2024-01-15T10:30:00",
+  "tipo": "RECEITA",
+  "descricao": "Salário mensal atualizado",
+  "accountId": {{accountId}}
+}
+
+### Delete Transaction 1
+DELETE {{baseUrl}}/api/transactions/{{transactionId1}}
+
+### Delete Transaction 2
+DELETE {{baseUrl}}/api/transactions/{{transactionId2}}

@@ -8,6 +8,7 @@ import com.fiap.midasfintech.service.AccountService;
 import com.fiap.midasfintech.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -192,8 +193,8 @@ class TransactionControllerTest {
 
     @Test
     void testDeleteTransactionNotFound() throws Exception {
-        when(transactionService.deleteById(999L))
-                .thenThrow(new IllegalArgumentException("Transação não encontrada"));
+        doThrow(new IllegalArgumentException("Transação não encontrada"))
+                .when(transactionService).deleteById(999L);
 
         mockMvc.perform(delete("/api/transactions/999"))
                 .andExpect(status().isNotFound());

@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -147,8 +148,8 @@ class AccountControllerTest {
 
     @Test
     void testDeleteAccountNotFound() throws Exception {
-        when(accountService.deleteById(999L))
-                .thenThrow(new IllegalArgumentException("Conta não encontrada"));
+        doThrow(new IllegalArgumentException("Conta não encontrada"))
+                .when(accountService).deleteById(999L);
 
         mockMvc.perform(delete("/api/accounts/999"))
                 .andExpect(status().isNotFound());

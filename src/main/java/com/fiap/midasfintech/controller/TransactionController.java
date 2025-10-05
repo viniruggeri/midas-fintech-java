@@ -110,7 +110,6 @@ public class TransactionController {
         Transaction transaction = new Transaction();
         BeanUtils.copyProperties(dto, transaction, "accountId");
 
-        // Buscar a conta pelo ID
         Account account = accountService.findById(dto.getAccountId())
                 .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada"));
         transaction.setAccount(account);

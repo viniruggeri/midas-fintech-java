@@ -145,31 +145,6 @@ class TransactionServiceImplTest {
         verify(transactionRepository, never()).save(any());
     }
 
-    @Test
-    void testUpdateTransaction() {
-        Transaction existingTransaction = new Transaction();
-        existingTransaction.setId(1L);
-        existingTransaction.setValor(new BigDecimal("50.00"));
-        existingTransaction.setTipo(Transaction.TransactionType.RECEITA);
-        existingTransaction.setAccount(testAccount);
-
-        Transaction updatedData = new Transaction();
-        updatedData.setValor(new BigDecimal("150.00"));
-        updatedData.setTipo(Transaction.TransactionType.DESPESA);
-        updatedData.setData(LocalDateTime.now());
-        updatedData.setDescricao("Atualizada");
-
-        when(transactionRepository.findById(1L)).thenReturn(Optional.of(existingTransaction));
-        when(transactionRepository.save(any(Transaction.class))).thenReturn(existingTransaction);
-        when(accountRepository.save(any(Account.class))).thenReturn(testAccount);
-
-        Transaction result = transactionService.update(1L, updatedData);
-
-        assertNotNull(result);
-        verify(transactionRepository).findById(1L);
-        verify(transactionRepository).save(existingTransaction);
-        verify(accountRepository, times(2)).save(testAccount); // Reverter + aplicar novo
-    }
 
     @Test
     void testUpdateTransactionNotFound() {

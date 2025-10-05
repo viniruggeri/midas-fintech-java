@@ -20,7 +20,7 @@ public class SwaggerConfig {
                         .contact(new Contact()
                                 .name("Equipe Midas")
                                 .email("contato@midas.com")
-                                .url("https://github.com/midas-fintech"))
+                                .url("https://github.com/viniruggeri/midas-fintech"))
                         .license(new License()
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT")));

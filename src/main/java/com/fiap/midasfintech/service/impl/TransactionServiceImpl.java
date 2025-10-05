@@ -28,7 +28,6 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction save(Transaction transaction) {
         validateTransaction(transaction);
 
-        // Atualizar saldo da conta
         Account account = transaction.getAccount();
         BigDecimal newBalance = calculateNewBalance(account, transaction);
         account.setSaldo(newBalance);
@@ -54,17 +53,15 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction existingTransaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transação não encontrada"));
 
-        // Reverter o impacto da transação anterior no saldo
+
         Account account = existingTransaction.getAccount();
         BigDecimal revertedBalance = revertTransactionBalance(account, existingTransaction);
 
-        // Atualizar dados da transação
         existingTransaction.setValor(transaction.getValor());
         existingTransaction.setTipo(transaction.getTipo());
         existingTransaction.setDescricao(transaction.getDescricao());
         existingTransaction.setData(transaction.getData());
 
-        // Aplicar novo impacto no saldo
         BigDecimal newBalance = calculateNewBalance(account, existingTransaction);
         account.setSaldo(newBalance);
         accountRepository.save(account);
@@ -77,7 +74,6 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transação não encontrada"));
 
-        // Reverter o impacto da transação no saldo
         Account account = transaction.getAccount();
         BigDecimal revertedBalance = revertTransactionBalance(account, transaction);
         account.setSaldo(revertedBalance);
