@@ -188,7 +188,7 @@ set ORACLE_PASSWORD=sua_senha
 
 ## 🎥 Vídeo de Apresentação
 
-[Link para vídeo] - Apresentação da Proposta Tecnológica:
+[apresentação](https://youtu.be/UR1eIVgAwuE) - Apresentação da Proposta Tecnológica:
 - **Público-alvo**: Pessoas físicas que desejam controlar suas finanças pessoais
 - **Problemas solucionados**: 
   - Controle descentralizado de contas bancárias
