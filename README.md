@@ -17,8 +17,8 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 | Nome | Função | RM        | Responsabilidade no Projeto |
 |------|--------|-----------|---------------------------|
 | **Vinicius** | Tech Lead / IA Engineer | 560593    | Desenvolvimento Java/Spring Boot, Arquitetura da API, Serviços de IA com RAG |
-| **Barbara** | Cloud/QA Engineer | RM Barbara | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
-| **Yasmin** | Mobile/Backend Developer | RM Yasmin | Mobile Development, .NET Development, Integração com API |
+| **Barbara** | Cloud/QA Engineer |  560431 | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
+| **Yasmin** | Mobile/Backend Developer | 560039 | Mobile Development, .NET Development, Integração com API |
 
 ## 🏗️ Arquitetura da Aplicação
 
