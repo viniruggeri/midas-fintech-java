@@ -55,7 +55,7 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 ## 🛠️ Tecnologias
 
 - **Java 21** - Linguagem principal
-- **Spring Boot 3.5.6** - Framework principal
+- **Spring Boot 3.2.5** - Framework principal
 - **Spring Data JPA** - Persistência de dados e mapeamento objeto-relacional
 - **Spring HATEOAS** - Implementação de hipermídia (Nível 3 Richardson) **[NOVO Sprint 2]**
 - **Spring Validation** - Validação funcional com Bean Validation
@@ -88,7 +88,7 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 ![DER](docs/diagrams/der-diagram.png)
 
 ### Diagrama de Classes de Entidade
-![Classes](docs/diagrams/class-diagram.png)
+![Classes](docs/diagrams/diagrama-classes-img.jpg)
 
 ### Explicação dos Relacionamentos e Constraints:
 - **Account (1) ←→ (N) Transaction**: Uma conta pode ter várias transações
