@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,35 +33,29 @@ public class AccountController {
     public ResponseEntity<AccountResponseDto> createAccount(@Valid @RequestBody AccountRequestDto requestDto) {
         Account account = convertToEntity(requestDto);
         Account savedAccount = accountService.save(account);
-        AccountResponseDto responseDto = convertToDto(savedAccount);
-        responseDto.add(linkTo(methodOn(AccountController.class).getAccountById(savedAccount.getId())).withSelfRel());
+        AccountResponseDto responseDto = convertToDtoWithLinks(savedAccount);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping
     @Operation(summary = "Listar todas as contas", description = "Retorna todas as contas cadastradas")
-    public ResponseEntity<List<AccountResponseDto>> getAllAccounts() {
+    public ResponseEntity<CollectionModel<AccountResponseDto>> getAllAccounts() {
         List<Account> accounts = accountService.findAll();
         List<AccountResponseDto> responseDtos = accounts.stream()
-                .map(account -> {
-                    AccountResponseDto dto = convertToDto(account);
-                    dto.add(linkTo(methodOn(AccountController.class).getAccountById(account.getId())).withSelfRel());
-                    return dto;
-                })
+                .map(this::convertToDtoWithLinks)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responseDtos);
+
+        CollectionModel<AccountResponseDto> collectionModel = CollectionModel.of(responseDtos);
+        collectionModel.add(linkTo(methodOn(AccountController.class).getAllAccounts()).withSelfRel());
+
+        return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar conta por ID", description = "Retorna uma conta específica pelo ID")
     public ResponseEntity<AccountResponseDto> getAccountById(@PathVariable Long id) {
         return accountService.findById(id)
-                .map(account -> {
-                    AccountResponseDto dto = convertToDto(account);
-                    dto.add(linkTo(methodOn(AccountController.class).getAccountById(id)).withSelfRel());
-                    dto.add(linkTo(methodOn(AccountController.class).getAllAccounts()).withRel("all-accounts"));
-                    return ResponseEntity.ok(dto);
-                })
+                .map(account -> ResponseEntity.ok(convertToDtoWithLinks(account)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -72,9 +67,7 @@ public class AccountController {
         try {
             Account account = convertToEntity(requestDto);
             Account updatedAccount = accountService.update(id, account);
-            AccountResponseDto responseDto = convertToDto(updatedAccount);
-            responseDto.add(linkTo(methodOn(AccountController.class).getAccountById(id)).withSelfRel());
-            return ResponseEntity.ok(responseDto);
+            return ResponseEntity.ok(convertToDtoWithLinks(updatedAccount));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
@@ -97,9 +90,18 @@ public class AccountController {
         return account;
     }
 
-    private AccountResponseDto convertToDto(Account account) {
+    private AccountResponseDto convertToDtoWithLinks(Account account) {
         AccountResponseDto dto = new AccountResponseDto();
         BeanUtils.copyProperties(account, dto);
+
+        Long id = account.getId();
+        // Links HATEOAS (Nível 3 de Maturidade Richardson)
+        dto.add(linkTo(methodOn(AccountController.class).getAccountById(id)).withSelfRel());
+        dto.add(linkTo(methodOn(AccountController.class).getAllAccounts()).withRel("all-accounts"));
+        dto.add(linkTo(methodOn(AccountController.class).updateAccount(id, null)).withRel("update"));
+        dto.add(linkTo(methodOn(AccountController.class).deleteAccount(id)).withRel("delete"));
+        dto.add(linkTo(methodOn(TransactionController.class).getTransactionsByAccountId(id)).withRel("transactions"));
+
         return dto;
     }
 }

@@ -28,7 +28,23 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "accounts"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Create Account returns 201 and id', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.id).to.exist;",
+                  "  pm.environment.set('accountId', json.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get All Accounts",
@@ -40,7 +56,24 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "accounts"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Accounts collection is HAL with _links and _embedded', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links).to.have.property('self');",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "  pm.expect(json._embedded).to.have.property('accountResponseDtoList');",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get Account by ID",
@@ -48,11 +81,30 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/accounts/1",
+              "raw": "{{baseUrl}}/api/accounts/{{accountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "accounts", "1"]
+              "path": ["api", "accounts", "{{accountId}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Account has HATEOAS links', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "  pm.expect(json._links['all-accounts'].href).to.exist;",
+                  "  pm.expect(json._links.update.href).to.exist;",
+                  "  pm.expect(json._links.delete.href).to.exist;",
+                  "  pm.expect(json._links.transactions.href).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Update Account",
@@ -69,11 +121,27 @@
               "raw": "{\n  \"nome\": \"Conta Principal Atualizada\",\n  \"saldo\": 1500.00\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/accounts/1",
+              "raw": "{{baseUrl}}/api/accounts/{{accountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "accounts", "1"]
+              "path": ["api", "accounts", "{{accountId}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Update Account returns 200 and HATEOAS links', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "  pm.expect(json._links['all-accounts'].href).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Delete Account",
@@ -81,11 +149,24 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/accounts/1",
+              "raw": "{{baseUrl}}/api/accounts/{{accountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "accounts", "1"]
+              "path": ["api", "accounts", "{{accountId}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Delete Account returns 204', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -111,7 +192,23 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "transactions"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Create Transaction returns 201 and id', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.id).to.exist;",
+                  "  pm.environment.set('transactionId1', json.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Create Transaction - Despesa",
@@ -132,7 +229,23 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "transactions"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Create Transaction 2 returns 201 and id', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.id).to.exist;",
+                  "  pm.environment.set('transactionId2', json.id);",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get All Transactions",
@@ -144,7 +257,23 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "transactions"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Transactions collection is HAL', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "  pm.expect(json._embedded).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get Transaction by ID",
@@ -152,11 +281,31 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/transactions/1",
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId1}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "transactions", "1"]
+              "path": ["api", "transactions", "{{transactionId1}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Transaction has HATEOAS links', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "  pm.expect(json._links['all-transactions'].href).to.exist;",
+                  "  pm.expect(json._links.update.href).to.exist;",
+                  "  pm.expect(json._links.delete.href).to.exist;",
+                  "  pm.expect(json._links.account.href).to.exist;",
+                  "  pm.expect(json._links['account-transactions'].href).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get Transactions by Account ID",
@@ -164,11 +313,27 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/transactions/account/1",
+              "raw": "{{baseUrl}}/api/transactions/account/{{accountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "transactions", "account", "1"]
+              "path": ["api", "transactions", "account", "{{accountId}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Account transactions collection has links', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "  pm.expect(json._links.account.href).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get Transactions by Account ID (Paged)",
@@ -176,9 +341,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/transactions/account/1/paged?page=0&size=10&sort=data,desc",
+              "raw": "{{baseUrl}}/api/transactions/account/{{accountId}}/paged?page=0&size=10&sort=data,desc",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "transactions", "account", "1", "paged"],
+              "path": ["api", "transactions", "account", "{{accountId}}", "paged"],
               "query": [
                 {
                   "key": "page",
@@ -194,7 +359,20 @@
                 }
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Paged endpoint returns 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Update Transaction",
@@ -211,11 +389,26 @@
               "raw": "{\n  \"valor\": 600.00,\n  \"data\": \"2024-01-15T10:30:00\",\n  \"tipo\": \"RECEITA\",\n  \"descricao\": \"Salário mensal atualizado\",\n  \"accountId\": 1\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/transactions/1",
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId1}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "transactions", "1"]
+              "path": ["api", "transactions", "{{transactionId1}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Update Transaction returns 200 and links', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json._links.self.href).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Delete Transaction",
@@ -223,11 +416,24 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/transactions/1",
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId1}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "transactions", "1"]
+              "path": ["api", "transactions", "{{transactionId1}}"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Delete Transaction returns 204', function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     }

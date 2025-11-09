@@ -85,9 +85,11 @@ class AccountControllerTest {
 
         mockMvc.perform(get("/api/accounts"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nome").value("Conta Teste"))
-                .andExpect(jsonPath("$[1].nome").value("Conta 2"));
+                .andExpect(jsonPath("$._links.self.href").exists())
+                .andExpect(jsonPath("$._embedded.accountResponseDtoList.length()").value(2))
+                .andExpect(jsonPath("$._embedded.accountResponseDtoList[0].nome").value("Conta Teste"))
+                .andExpect(jsonPath("$._embedded.accountResponseDtoList[1].nome").value("Conta 2"))
+                .andExpect(jsonPath("$._embedded.accountResponseDtoList[0]._links.self.href").exists());
     }
 
     @Test
@@ -98,7 +100,12 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.nome").value("Conta Teste"))
-                .andExpect(jsonPath("$.saldo").value(1000.00));
+                .andExpect(jsonPath("$.saldo").value(1000.00))
+                .andExpect(jsonPath("$._links.self.href").exists())
+                .andExpect(jsonPath("$._links.all-accounts.href").exists())
+                .andExpect(jsonPath("$._links.update.href").exists())
+                .andExpect(jsonPath("$._links.delete.href").exists())
+                .andExpect(jsonPath("$._links.transactions.href").exists());
     }
 
     @Test
@@ -153,5 +160,17 @@ class AccountControllerTest {
 
         mockMvc.perform(delete("/api/accounts/999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetAccountById_HateoasLinks() throws Exception {
+        when(accountService.findById(1L)).thenReturn(Optional.of(testAccount));
+        mockMvc.perform(get("/api/accounts/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._links.self.href").exists())
+                .andExpect(jsonPath("$._links.all-accounts.href").exists())
+                .andExpect(jsonPath("$._links.update.href").exists())
+                .andExpect(jsonPath("$._links.delete.href").exists())
+                .andExpect(jsonPath("$._links.transactions.href").exists());
     }
 }

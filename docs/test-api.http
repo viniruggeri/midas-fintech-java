@@ -14,8 +14,27 @@ Content-Type: application/json
 ### Get All Accounts
 GET {{baseUrl}}/api/accounts
 
+> {% 
+client.test("Accounts collection is HAL with _links and _embedded", function() {
+  client.assert(response.status === 200, "Expected 200");
+  client.assert(response.body._links && response.body._links.self && response.body._links.self.href, "Missing collection self link");
+  client.assert(response.body._embedded && response.body._embedded.accountResponseDtoList, "Missing _embedded.accountResponseDtoList");
+});
+%}
+
 ### Get Account by ID
 GET {{baseUrl}}/api/accounts/{{accountId}}
+
+> {% 
+client.test("Account has HATEOAS links", function() {
+  const links = response.body._links;
+  client.assert(!!links && !!links.self && !!links.self.href, "Missing self");
+  client.assert(!!links && !!links["all-accounts"] && !!links["all-accounts"].href, "Missing all-accounts");
+  client.assert(!!links && !!links.update && !!links.update.href, "Missing update");
+  client.assert(!!links && !!links.delete && !!links.delete.href, "Missing delete");
+  client.assert(!!links && !!links.transactions && !!links.transactions.href, "Missing transactions");
+});
+%}
 
 ### Update Account
 PUT {{baseUrl}}/api/accounts/{{accountId}}
@@ -57,11 +76,39 @@ Content-Type: application/json
 ### Get All Transactions
 GET {{baseUrl}}/api/transactions
 
+> {% 
+client.test("Transactions collection is HAL", function() {
+  client.assert(response.status === 200, "Expected 200");
+  client.assert(response.body._links && response.body._links.self && response.body._links.self.href, "Missing collection self link");
+  client.assert(response.body._embedded, "Missing _embedded");
+});
+%}
+
 ### Get Transaction by ID
 GET {{baseUrl}}/api/transactions/{{transactionId1}}
 
+> {% 
+client.test("Transaction has HATEOAS links", function() {
+  const links = response.body._links;
+  client.assert(!!links && !!links.self && !!links.self.href, "Missing self");
+  client.assert(!!links && !!links["all-transactions"] && !!links["all-transactions"].href, "Missing all-transactions");
+  client.assert(!!links && !!links.update && !!links.update.href, "Missing update");
+  client.assert(!!links && !!links.delete && !!links.delete.href, "Missing delete");
+  client.assert(!!links && !!links.account && !!links.account.href, "Missing account");
+  client.assert(!!links && !!links["account-transactions"] && !!links["account-transactions"].href, "Missing account-transactions");
+});
+%}
+
 ### Get Transactions by Account ID
 GET {{baseUrl}}/api/transactions/account/{{accountId}}
+
+> {% 
+client.test("Account transactions collection has links", function() {
+  client.assert(response.status === 200, "Expected 200");
+  client.assert(response.body._links && response.body._links.self && response.body._links.self.href, "Missing collection self link");
+  client.assert(response.body._links && response.body._links.account && response.body._links.account.href, "Missing account link");
+});
+%}
 
 ### Get Transactions by Account ID (Paged)
 GET {{baseUrl}}/api/transactions/account/{{accountId}}/paged?page=0&size=10&sort=data,desc
