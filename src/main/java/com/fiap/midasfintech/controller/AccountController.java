@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/accounts")
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class AccountController {
         Account account = convertToEntity(requestDto);
         Account savedAccount = accountService.save(account);
         AccountResponseDto responseDto = convertToDto(savedAccount);
+        responseDto.add(linkTo(methodOn(AccountController.class).getAccountById(savedAccount.getId())).withSelfRel());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -38,7 +42,11 @@ public class AccountController {
     public ResponseEntity<List<AccountResponseDto>> getAllAccounts() {
         List<Account> accounts = accountService.findAll();
         List<AccountResponseDto> responseDtos = accounts.stream()
-                .map(this::convertToDto)
+                .map(account -> {
+                    AccountResponseDto dto = convertToDto(account);
+                    dto.add(linkTo(methodOn(AccountController.class).getAccountById(account.getId())).withSelfRel());
+                    return dto;
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseDtos);
     }
@@ -47,7 +55,12 @@ public class AccountController {
     @Operation(summary = "Buscar conta por ID", description = "Retorna uma conta específica pelo ID")
     public ResponseEntity<AccountResponseDto> getAccountById(@PathVariable Long id) {
         return accountService.findById(id)
-                .map(account -> ResponseEntity.ok(convertToDto(account)))
+                .map(account -> {
+                    AccountResponseDto dto = convertToDto(account);
+                    dto.add(linkTo(methodOn(AccountController.class).getAccountById(id)).withSelfRel());
+                    dto.add(linkTo(methodOn(AccountController.class).getAllAccounts()).withRel("all-accounts"));
+                    return ResponseEntity.ok(dto);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -60,6 +73,7 @@ public class AccountController {
             Account account = convertToEntity(requestDto);
             Account updatedAccount = accountService.update(id, account);
             AccountResponseDto responseDto = convertToDto(updatedAccount);
+            responseDto.add(linkTo(methodOn(AccountController.class).getAccountById(id)).withSelfRel());
             return ResponseEntity.ok(responseDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();

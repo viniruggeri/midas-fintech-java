@@ -4,6 +4,8 @@ API REST desenvolvida em Java com Spring Boot para gestão financeira pessoal, a
 
 **🔗 Repositório GitHub:** [midas-fintech repo](https://github.com/viniruggeri/midas-fintech-java)
 
+**📹 Vídeo de Apresentação:** [Link para o vídeo] _(a ser adicionado)_
+
 ## 📋 Descrição do Problema
 
 O sistema resolve o problema de controle financeiro pessoal, permitindo:
@@ -12,11 +14,17 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 - Controlar receitas e despesas
 - Fornecer dados estruturados para análises e relatórios financeiros
 
+## 🎯 Público-Alvo
+
+- Pessoas físicas que desejam controlar suas finanças pessoais
+- Pequenos empreendedores que precisam de gestão financeira simplificada
+- Usuários que buscam uma solução tecnológica moderna e intuitiva
+
 ## 👥 Equipe
 
 | Nome | Função | RM        | Responsabilidade no Projeto |
 |------|--------|-----------|---------------------------|
-| **Vinicius** | Tech Lead / IA Engineer | 560593    | Desenvolvimento Java/Spring Boot, Arquitetura da API, Serviços de IA com RAG |
+| **Vinicius Ruggeri** | Tech Lead / IA Engineer | 560593    | Desenvolvimento Java/Spring Boot, Arquitetura da API, HATEOAS, Serviços de IA com RAG |
 | **Barbara** | Cloud/QA Engineer | RM Barbara | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
 | **Yasmin** | Mobile/Backend Developer | RM Yasmin | Mobile Development, .NET Development, Integração com API |
 
@@ -25,7 +33,7 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 ### Camadas da Aplicação:
 ```
 ┌─────────────────┐
-│   Controller    │ ← REST Controllers (Nível 1 Richardson)
+│   Controller    │ ← REST Controllers (Nível 3 Richardson - HATEOAS)
 ├─────────────────┤
 │    Service      │ ← Regras de Negócio e Validações
 ├─────────────────┤
@@ -42,12 +50,14 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 - **Dependency Injection** (Spring IoC)
 - **MVC Pattern** (Model-View-Controller)
 - **DTO Pattern** (Data Transfer Objects)
+- **HATEOAS Pattern** (Hypermedia as the Engine of Application State)
 
 ## 🛠️ Tecnologias
 
 - **Java 21** - Linguagem principal
 - **Spring Boot 3.5.6** - Framework principal
 - **Spring Data JPA** - Persistência de dados e mapeamento objeto-relacional
+- **Spring HATEOAS** - Implementação de hipermídia (Nível 3 Richardson) **[NOVO Sprint 2]**
 - **Spring Validation** - Validação funcional com Bean Validation
 - **Lombok** - Redução de boilerplate code
 - **H2 Database** - Desenvolvimento
@@ -56,13 +66,29 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 - **Maven** - Gerenciamento de dependências
 - **JUnit 5 + Mockito** - Testes unitários e de integração
 
+## 🚀 Evolução Sprint 1 → Sprint 2
+
+### Sprint 1 (Nível 1 Richardson):
+- ✅ API REST básica com URIs e verbos HTTP
+- ✅ Persistência em Oracle Database
+- ✅ Validações funcionais
+- ✅ Testes automatizados
+
+### Sprint 2 (Nível 3 Richardson - HATEOAS):
+- ✅ **Links hipermídia em todas as respostas**
+- ✅ **Navegação autodescritiva entre recursos**
+- ✅ **CollectionModel para coleções**
+- ✅ **Links bidirecionais entre Account e Transaction**
+
+**📄 Documento detalhado:** [Evolução Sprint 1→2](docs/evolucao-sprint1-sprint2.md)
+
 ## 📊 Diagramas
 
 ### Diagrama Entidade-Relacionamento (DER)
-![DER](docs/diagrams/der-diagram.md)
+![DER](docs/diagrams/der-diagram.png)
 
 ### Diagrama de Classes de Entidade
-![Classes](docs/diagrams/class-diagram.md)
+![Classes](docs/diagrams/class-diagram.png)
 
 ### Explicação dos Relacionamentos e Constraints:
 - **Account (1) ←→ (N) Transaction**: Uma conta pode ter várias transações
@@ -93,7 +119,7 @@ cd midas-fintech-java
 
 ### Execução em Produção (Oracle):
 ```bash
-# Configure as variáveis de ambiente no `.env` 
+# Configure as variáveis de ambiente
 set ORACLE_URL=jdbc:oracle:thin:@//seu_host:1521/seu_servico
 set ORACLE_USER=seu_usuario
 set ORACLE_PASSWORD=sua_senha
@@ -102,127 +128,106 @@ set ORACLE_PASSWORD=sua_senha
 .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
-# Execute os endpoints via collection Postman/Insomnia:
-- Importe o arquivo `docs/midas-api-collection.json`
-- Teste todos os endpoints com exemplos de requisições
-- Valide a persistência e recuperação de dados
-- Verifique os status codes retornados
-- Confira a documentação Swagger para detalhes adicionais
-- Ajuste os dados conforme necessário para seus testes
+A aplicação estará disponível em: **http://localhost:8080**
 
-# Ou execute via test-api.http via HTTP Client do IntelliJ (versão paga):
-- Importe o arquivo `docs/midas-api-collection.http`
-- Teste todos os endpoints com exemplos de requisições
-- Valide a persistência e recuperação de dados
-- Verifique os status codes retornados
-- Confira a documentação Swagger para detalhes adicionais
-- Ajuste os dados conforme necessário para seus testes
-### Acessos:
-- **API**: http://localhost:8080/api
-- **Swagger UI**: http://localhost:8080/swagger-ui.html
-- **H2 Console**: http://localhost:8080/h2-console (dev only)
+## 📚 Documentação da API
 
-## 📚 Documentação da API (Swagger/OpenAPI)
+### Swagger UI (OpenAPI):
+Acesse: **http://localhost:8080/swagger-ui/index.html**
 
-### Endpoints Disponíveis:
+### Endpoints Principais:
 
-#### 🏦 **Accounts (Contas)**
-- `POST /api/accounts` - Criar conta
-- `GET /api/accounts` - Listar todas as contas
-- `GET /api/accounts/{id}` - Buscar conta por ID
-- `PUT /api/accounts/{id}` - Atualizar conta
-- `DELETE /api/accounts/{id}` - Excluir conta
+#### 🏦 Contas (Accounts)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/accounts` | Lista todas as contas (com links HATEOAS) |
+| GET | `/api/accounts/{id}` | Busca uma conta por ID (com links HATEOAS) |
+| POST | `/api/accounts` | Cria uma nova conta |
+| PUT | `/api/accounts/{id}` | Atualiza uma conta existente |
+| DELETE | `/api/accounts/{id}` | Remove uma conta |
 
-#### 💰 **Transactions (Transações)**
-- `POST /api/transactions` - Criar transação
-- `GET /api/transactions` - Listar todas as transações
-- `GET /api/transactions/{id}` - Buscar transação por ID
-- `GET /api/transactions/account/{accountId}` - Transações por conta
-- `GET /api/transactions/account/{accountId}/paged` - Transações paginadas
-- `PUT /api/transactions/{id}` - Atualizar transação
-- `DELETE /api/transactions/{id}` - Excluir transação
+#### 💰 Transações (Transactions)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/transactions` | Lista todas as transações (com links HATEOAS) |
+| GET | `/api/transactions/{id}` | Busca uma transação por ID (com links HATEOAS) |
+| GET | `/api/transactions/account/{accountId}` | Lista transações de uma conta |
+| GET | `/api/transactions/account/{accountId}/paged` | Lista transações paginadas |
+| POST | `/api/transactions` | Cria uma nova transação |
+| PUT | `/api/transactions/{id}` | Atualiza uma transação |
+| DELETE | `/api/transactions/{id}` | Remove uma transação |
 
-**API implementada em conformidade com Richardson Maturity Model - Nível 1**
+### Exemplo de Resposta HATEOAS (Sprint 2):
 
-## 🧪 Testes da Aplicação
-
-### Suíte de Testes Implementada:
-#### **Testes Unitários:**
-- `AccountTest` - Validações Bean Validation
-- `TransactionTest` - Validações e enums
-- `AccountServiceImplTest` - Regras de negócio (Mockito)
-- `TransactionServiceImplTest` - Lógica de saldo e validações
-
-#### **Testes de Integração:**
-- `AccountRepositoryTest` - Persistência JPA (@DataJpaTest)
-- `TransactionRepositoryTest` - Queries e relacionamentos
-- `AccountControllerTest` - API REST (@WebMvcTest)
-- `TransactionControllerTest` - Endpoints e status codes
-
-### Collection Postman/Insomnia:
-- **Arquivo**: `docs/midas-api-collection.json`
-- **Conteúdo**: Todos os endpoints com exemplos de requisições
-- **Instruções**: Importar no Postman/Insomnia para testar
-- **Validação**: Persistência e recuperação de dados testada
-
-### Cenários de Teste Cobertos:
-1. **CRUD Completo de Contas**
-2. **CRUD Completo de Transações** 
-3. **Validações de Negócio**
-4. **Relacionamentos entre Entidades**
-5. **Persistência e Recuperação de Dados Oracle/H2**
-
-## 📋 Cronograma de Desenvolvimento
-
-| Atividade | Responsável | Prazo | Status |
-|-----------|-------------|-------|--------|
-| Modelagem de Dados e DER | Barbara | 26/09 - 28/09 | ✅ Concluído |
-| Entidades JPA e Mapeamentos | Vinicius | 29/09 - 01/10 | ✅ Concluído |
-| Repositories com Generics | Vinicius | 02/10 - 03/10 | ✅ Concluído |
-| Services e Regras de Negócio | Vinicius | 04/10 - 05/10 | ✅ Concluído |
-| Controllers REST Nível 1 | Vinicius | 06/10 - 07/10 | ✅ Concluído |
-| Testes Automatizados | Barbara | 08/10 - 09/10 | ✅ Concluído |
-| Documentação e Collection | Barbara | 09/10 - 10/10 | ✅ Concluído |
-
-**Sprint:** 26/09/2025 - 10/10/2025
-
-## 🎥 Vídeo de Apresentação
-
-[Link para vídeo] - Apresentação da Proposta Tecnológica:
-- **Público-alvo**: Pessoas físicas que desejam controlar suas finanças pessoais
-- **Problemas solucionados**: 
-  - Controle descentralizado de contas bancárias
-  - Falta de visibilidade sobre receitas e despesas
-  - Dificuldade para acompanhar transações financeiras
-  - Necessidade de dados estruturados para análises
-
-## 📁 Estrutura do Repositório
-
-```
-midas-fintech-java/
-├── src/main/java/com/fiap/midasfintech/
-│   ├── entity/          # Entidades JPA (Account, Transaction)
-│   ├── repository/      # Repositories com Generics
-│   ├── service/         # Regras de Negócio e Validações
-│   ├── controller/      # REST Controllers
-│   ├── dto/            # DTOs Request/Response
-│   └── config/         # Configurações (Swagger, Exception Handler)
-├── src/main/resources/
-│   ├── application.yaml      # Configuração principal
-│   ├── application-dev.yaml  # Profile H2
-│   ├── application-prod.yaml # Profile Oracle
-│   └── data.sql             # Dados iniciais
-├── src/test/java/           # Testes unitários e integração
-├── docs/
-│   ├── cronograma-desenvolvimento.md
-│   ├── verificacao-conformidade.md
-│   ├── diagrams/       # DER e Diagrama de Classes
-│   └── midas-api-collection.json # Collection Postman
-└── README.md          # Esta documentação
+```json
+{
+  "id": 1,
+  "nome": "Conta Corrente",
+  "saldo": 1500.00,
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/accounts/1"
+    },
+    "all-accounts": {
+      "href": "http://localhost:8080/api/accounts"
+    },
+    "update": {
+      "href": "http://localhost:8080/api/accounts/1"
+    },
+    "delete": {
+      "href": "http://localhost:8080/api/accounts/1"
+    },
+    "transactions": {
+      "href": "http://localhost:8080/api/transactions/account/1"
+    }
+  }
+}
 ```
 
-## 📄 Licença
+## 🧪 Testes
 
-[Midas Fintech - Todos os direitos reservados](LICENSE)
+### Executar Testes:
+```bash
+.\mvnw.cmd test
+```
 
-#### © 2025 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados.
+### Collection Postman:
+Importe o arquivo: **[docs/midas-api-collection.json](docs/midas-api-collection.json)**
+
+### HTTP Client (IntelliJ):
+Use o arquivo: **[docs/test-api.http](docs/test-api.http)**
+
+## 📁 Estrutura do Projeto
+
+```
+src/main/java/com/fiap/midasfintech/
+├── config/          # Configurações (Swagger, Handlers, Inicialização)
+├── controller/      # Controllers REST com HATEOAS
+├── dto/             # DTOs de Request e Response
+├── entity/          # Entidades JPA
+├── repository/      # Repositories com JpaRepository
+└── service/         # Services com lógica de negócio
+```
+
+## 📖 Documentação Adicional
+
+- **[Cronograma de Desenvolvimento](docs/cronograma-desenvolvimento.md)** - Planejamento Sprint 1 e 2
+- **[Evolução Sprint 1→2](docs/evolucao-sprint1-sprint2.md)** - Detalhamento das melhorias
+- **[Diagramas](docs/diagrams/)** - DER e Diagrama de Classes
+
+## 🔐 Licença
+
+Este projeto é proprietário e de uso restrito:
+- Uso permitido apenas para membros da equipe (Vinicius, Barbara, Yasmin)
+- Uso permitido para avaliação pela FIAP (professores)
+- Proibida distribuição, modificação ou uso comercial sem autorização
+
+## 📞 Contato
+
+Para dúvidas ou mais informações, entre em contato com a equipe através do repositório GitHub.
+
+---
+
+**Versão:** 2.0.0 (Sprint 2)  
+**Data:** 02/11/2025  
+**Status:** ✅ Pronto para Produção

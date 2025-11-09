@@ -26,9 +26,6 @@ Content-Type: application/json
   "saldo": 1500.00
 }
 
-### Delete Account
-DELETE {{baseUrl}}/api/accounts/{{accountId}}
-
 ### Create Transaction - Receita
 POST {{baseUrl}}/api/transactions
 Content-Type: application/json
@@ -86,3 +83,6 @@ DELETE {{baseUrl}}/api/transactions/{{transactionId1}}
 
 ### Delete Transaction 2
 DELETE {{baseUrl}}/api/transactions/{{transactionId2}}
+
+### Delete Account (after transactions)
+DELETE {{baseUrl}}/api/accounts/{{accountId}}

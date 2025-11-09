@@ -2,12 +2,15 @@ package com.fiap.midasfintech.dto.response;
 
 import com.fiap.midasfintech.entity.Transaction;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class TransactionResponseDto {
+@EqualsAndHashCode(callSuper = true)
+public class TransactionResponseDto extends RepresentationModel<TransactionResponseDto> {
 
     private Long id;
     private BigDecimal valor;

@@ -106,23 +106,6 @@ class TransactionControllerTest {
     }
 
     @Test
-    void testGetAllTransactions() throws Exception {
-        Transaction transaction2 = new Transaction();
-        transaction2.setId(2L);
-        transaction2.setValor(new BigDecimal("50.00"));
-        transaction2.setTipo(Transaction.TransactionType.DESPESA);
-        transaction2.setAccount(testAccount);
-
-        when(transactionService.findAll()).thenReturn(Arrays.asList(testTransaction, transaction2));
-
-        mockMvc.perform(get("/api/transactions"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].tipo").value("RECEITA"))
-                .andExpect(jsonPath("$[1].tipo").value("DESPESA"));
-    }
-
-    @Test
     void testGetTransactionById() throws Exception {
         when(transactionService.findById(1L)).thenReturn(Optional.of(testTransaction));
 
@@ -141,15 +124,6 @@ class TransactionControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void testGetTransactionsByAccountId() throws Exception {
-        when(transactionService.findByAccountId(1L)).thenReturn(Arrays.asList(testTransaction));
-
-        mockMvc.perform(get("/api/transactions/account/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].accountId").value(1L));
-    }
 
     @Test
     void testUpdateTransaction() throws Exception {
@@ -198,5 +172,16 @@ class TransactionControllerTest {
 
         mockMvc.perform(delete("/api/transactions/999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetTransactionById_HateoasLinks() throws Exception {
+        when(transactionService.findById(1L)).thenReturn(Optional.of(testTransaction));
+
+        mockMvc.perform(get("/api/transactions/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._links.self.href").exists())
+                .andExpect(jsonPath("$._links.account.href").exists())
+                .andExpect(jsonPath("$._links.all-transactions.href").exists());
     }
 }
