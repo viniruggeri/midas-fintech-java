@@ -111,7 +111,7 @@ set ORACLE_PASSWORD=sua_senha
 - Ajuste os dados conforme necessário para seus testes
 
 # Ou execute via test-api.http via HTTP Client do IntelliJ (versão paga):
-- Importe o arquivo `docs/midas-api-collection.http`
+- Importe o arquivo `docs/test-api.http`
 - Teste todos os endpoints com exemplos de requisições
 - Valide a persistência e recuperação de dados
 - Verifique os status codes retornados
@@ -205,19 +205,27 @@ Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
 
 **Sprint:** 26/09/2025 - 10/10/2025
 
-## 🎥 Vídeo de Apresentação
+## 🎥 Vídeos
 
-[Link para vídeo] - Apresentação da Proposta Tecnológica:
-- **Público-alvo**: Pessoas físicas que desejam controlar suas finanças pessoais
-- **Problemas solucionados**: 
-  - Controle descentralizado de contas bancárias
-  - Falta de visibilidade sobre receitas e despesas
-  - Dificuldade para acompanhar transações financeiras
-  - Necessidade de dados estruturados para análises
+- Apresentação geral: [apresentação](https://youtu.be/UR1eIVgAwuE)
+- Evolução Sprint 2: [evolução sp2](https://youtu.be/IxnOknQVfv8)
+
+Apresentação da Proposta Tecnológica
+
+### Público-alvo
+
+- Pessoas físicas que desejam controlar suas finanças pessoais
+
+### Problemas solucionados
+
+- Controle descentralizado de contas bancárias
+- Falta de visibilidade sobre receitas e despesas
+- Dificuldade para acompanhar transações financeiras
+- Necessidade de dados estruturados para análises
 
 ## 📁 Estrutura do Repositório
 
-```
+```text
 midas-fintech-java/
 ├── src/main/java/com/fiap/midasfintech/
 │   ├── entity/          # Entidades JPA (Account, Transaction)
@@ -244,4 +252,4 @@ midas-fintech-java/
 
 [Midas Fintech - Todos os direitos reservados](LICENSE)
 
-#### © 2025 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados.
+### © 2025 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados
