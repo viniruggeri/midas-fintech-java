@@ -4,10 +4,35 @@ spring:
   application:
     name: midas-api
 
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    previous-secrets: ${JWT_PREVIOUS_SECRETS:}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:120}
+  auth:
+    rate-limit:
+      max-attempts: ${AUTH_RATE_LIMIT_MAX_ATTEMPTS:10}
+      window-seconds: ${AUTH_RATE_LIMIT_WINDOW_SECONDS:60}
+
 server:
   port: 8080
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  default-produces-media-type: application/json
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{requestId:-no-req}] %-5level %logger{36} - %msg%n"
   level:
     com.fiap.midasfintech: INFO
-    org.springframework.web: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO

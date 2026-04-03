@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     List<Transaction> findByAccountId(Long accountId);
@@ -18,4 +17,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByAccountIdAndDataBetween(Long accountId, LocalDateTime startDate, LocalDateTime endDate);
 
     Page<Transaction> findByAccount(Account account, Pageable pageable);
+
+    boolean existsByDescricaoContaining(String descricao);
 }

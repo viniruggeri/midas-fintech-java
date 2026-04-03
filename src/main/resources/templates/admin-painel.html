@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Admin</title>
+    <style>
+      body {
+        font-family: Verdana, sans-serif;
+        margin: 0;
+        background: #f8f8fb;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      .card {
+        background: #fff;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+      }
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+      }
+      label {
+        display: block;
+        margin: 8px 0 4px;
+        font-weight: bold;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      button {
+        margin-top: 10px;
+        padding: 10px 14px;
+        background: #7a1e1e;
+        border: 0;
+        color: #fff;
+        cursor: pointer;
+      }
+      .msg {
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+      }
+      .erro {
+        background: #ffe8e8;
+        color: #a52222;
+      }
+      .ok {
+        background: #e7f8ea;
+        color: #1f7a2d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Painel Administrativo</h2>
+
+      <div class="card">
+        <div th:if="${error}" class="msg erro" th:text="${error}"></div>
+        <div th:if="${success}" class="msg ok" th:text="${success}"></div>
+
+        <form
+          th:action="@{/admin/estorno}"
+          th:object="${estornoForm}"
+          method="post"
+        >
+          <label for="transacaoId">ID da transação</label>
+          <input id="transacaoId" type="number" th:field="*{transacaoId}" />
+
+          <label for="motivo">Motivo</label>
+          <input id="motivo" type="text" th:field="*{motivo}" />
+
+          <button type="submit">Executar estorno</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Últimas transações</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Conta</th>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Data</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="tx : ${transacoes}">
+              <td th:text="${tx.id}">1</td>
+              <td th:text="${tx.account.nome}">Conta</td>
+              <td th:text="${tx.tipo}">RECEITA</td>
+              <td th:text="${tx.valor}">0.00</td>
+              <td th:text="${tx.data}">2026-01-01T10:00</td>
+              <td th:text="${tx.descricao}">descricao</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

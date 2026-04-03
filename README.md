@@ -122,6 +122,36 @@ set ORACLE_PASSWORD=sua_senha
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **H2 Console**: http://localhost:8080/h2-console (dev only)
 
+## Segurança da API (JWT)
+
+### Como autenticar
+1. Solicite token em `POST /api/auth/token`:
+
+```json
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+
+2. Use o token nos endpoints da API:
+
+```http
+Authorization: Bearer <seu_token>
+```
+
+### Observações importantes
+- Endpoints `/api/**` são protegidos por JWT (stateless).
+- Rotas web (`/login`, `/cliente/**`, `/admin/**`) continuam com login de formulário.
+- O endpoint de token possui rate limit para reduzir tentativas de força bruta.
+
+### Variáveis de ambiente de segurança
+- `JWT_SECRET` (obrigatória fora do profile dev): mínimo de 32 caracteres.
+- `JWT_PREVIOUS_SECRETS` (opcional): segredos antigos separados por vírgula para rotação sem derrubar sessões imediatamente.
+- `JWT_EXPIRATION_MINUTES` (opcional): expiração do token em minutos (default: 120).
+- `AUTH_RATE_LIMIT_MAX_ATTEMPTS` (opcional): limite de tentativas por janela (default: 10).
+- `AUTH_RATE_LIMIT_WINDOW_SECONDS` (opcional): janela do rate limit em segundos (default: 60).
+
 ## 📚 Documentação da API (Swagger/OpenAPI)
 
 ### Endpoints Disponíveis:
