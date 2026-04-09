@@ -25,9 +25,8 @@ class OpenApiDocsTest {
     }
 
     @Test
-    void shouldExposeSwaggerUi() throws Exception {
+    void shouldNotExposeSwaggerUiWhenUiDependencyIsMissing() throws Exception {
         mockMvc.perform(get("/swagger-ui.html"))
-                .andExpect(status().isFound()); // redirects to /swagger-ui/index.html
+                .andExpect(status().isNotFound());
     }
 }
-

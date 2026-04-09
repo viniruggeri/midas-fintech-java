@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Midas</title>
+    <link rel="stylesheet" th:href="@{/css/midas-ui.css}" />
+  </head>
+  <body>
+    <main class="page-shell" style="max-width: 460px">
+      <section class="card">
+        <div class="card-body">
+          <span class="badge">Midas Fintech</span>
+          <h1 class="hero-title" style="margin-top: 10px">Acesse sua área</h1>
+          <p class="subtitle">Login web para perfis ADMIN e CLIENT com opção OAuth2 GitHub.</p>
+
+          <div th:if="${param.error}" class="msg erro">Usuário ou senha inválidos.</div>
+          <div th:if="${param.logout}" class="msg ok">Logout realizado com sucesso.</div>
+
+          <form th:action="@{/login}" method="post">
+            <div class="field">
+              <label for="username">Usuário</label>
+              <input id="username" name="username" type="text" required autofocus />
+            </div>
+
+            <div class="field">
+              <label for="password">Senha</label>
+              <input id="password" name="password" type="password" required />
+            </div>
+
+            <button class="btn btn-primary btn-wide" type="submit">Entrar com senha</button>
+          </form>
+
+          <p class="helper" style="margin-top: 14px">
+            Demo local: admin/admin123 e cliente/cliente123
+          </p>
+
+          <div th:if="${githubEnabled}" style="margin-top: 12px">
+            <a class="btn btn-secondary btn-link btn-wide" th:href="@{/oauth2/authorization/github}">
+              Entrar com GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

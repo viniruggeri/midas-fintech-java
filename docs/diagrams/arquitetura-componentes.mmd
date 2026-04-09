@@ -1,0 +1,23 @@
+flowchart LR
+    U[Usuario Web] -->|Form Login| W[Spring MVC + Thymeleaf]
+    U -->|JWT| A[API REST /api/**]
+
+    W --> S[SecurityConfig]
+    A --> S
+
+    S --> J[JwtService]
+    S --> O[OAuth2 GitHub Opcional]
+    S --> R[RBAC ADMIN / CLIENT]
+
+    A --> F[FluxoFinanceiroService]
+    W --> F
+
+    F --> AC[AccountService]
+    F --> TR[TransactionService]
+    A --> RT[RefreshTokenService]
+    A --> AU[SecurityAuditService]
+
+    AC --> DB[(Oracle / H2)]
+    TR --> DB
+    RT --> DB
+    AU --> DB

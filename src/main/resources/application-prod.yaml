@@ -8,8 +8,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: validate
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -18,12 +18,22 @@ spring:
         order_inserts: true
         order_updates: true
 
+  flyway:
+    enabled: true
+
   sql:
     init:
       mode: never
 
+# Em produção, JWT_SECRET deve ser definido via variável de ambiente.
+# Para login GitHub OAuth2 em produção, definir:
+# GITHUB_OAUTH2_CLIENT_ID, GITHUB_OAUTH2_CLIENT_SECRET,
+# SECURITY_OAUTH2_GITHUB_ENABLED=true e SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS.
+
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.fiap.midasfintech: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.springframework.security: INFO
     root: INFO

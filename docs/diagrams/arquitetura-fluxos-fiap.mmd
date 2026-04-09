@@ -1,0 +1,10 @@
+flowchart TD
+    CL[CLIENT] --> T1[Transferencia entre contas]
+    T1 --> V1[Valida conta origem != destino]
+    T1 --> V2[Valida saldo suficiente]
+    T1 --> M1[Movimenta duas contas + grava transacao]
+
+    AD[ADMIN] --> E1[Estorno de transacao]
+    E1 --> V3[Valida transacao existe]
+    E1 --> V4[Valida nao estornada antes]
+    E1 --> M2[Cria transacao inversa e auditoria]

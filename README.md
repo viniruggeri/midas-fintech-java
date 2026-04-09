@@ -47,22 +47,35 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 
 - **Java 21** - Linguagem principal
 - **Spring Boot 3.2.5** - Framework principal
+- **Spring Security** - Autenticação e autorização (ADMIN/CLIENT)
+- **OAuth2 Client (GitHub)** - Login social opcional na camada web
+- **JWT (jjwt)** - Segurança stateless para endpoints `/api/**`
 - **Spring Data JPA** - Persistência de dados e mapeamento objeto-relacional
 - **Spring Validation** - Validação funcional com Bean Validation
+- **Flyway** - Migrações versionadas de banco de dados
+- **Thymeleaf** - Frontend server-side para fluxo web FIAP
+- **Spring Boot Actuator** - Endpoints operacionais (health/info/metrics)
 - **Lombok** - Redução de boilerplate code
 - **H2 Database** - Desenvolvimento
 - **Oracle Database** - Produção
 - **SpringDoc OpenAPI** - Documentação automática da API
 - **Maven** - Gerenciamento de dependências
 - **JUnit 5 + Mockito** - Testes unitários e de integração
+- **Docker** - Empacotamento e execução em container
 
 ## 📊 Diagramas
 
-### Diagrama Entidade-Relacionamento (DER)
-![DER](docs/diagrams/der-diagram.png)
+### Arquitetura Atual (Segurança + Fluxos)
+- Arquivo fonte Mermaid: `docs/diagrams/arquitetura-midas.md`
 
-### Diagrama de Classes de Entidade
-![Classes](docs/diagrams/diagrama-classes-img.jpg)
+### 1) Visão de Componentes
+![Visão de Componentes](docs/diagrams/arquitetura-componentes.png)
+
+### 2) Fluxo de Autenticação da API
+![Fluxo de Autenticação](docs/diagrams/arquitetura-auth-sequence.png)
+
+### 3) Fluxos Funcionais FIAP
+![Fluxos Funcionais FIAP](docs/diagrams/arquitetura-fluxos-fiap.png)
 
 ### Explicação dos Relacionamentos e Constraints:
 - **Account (1) ←→ (N) Transaction**: Uma conta pode ter várias transações
@@ -78,7 +91,7 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 
 ### Pré-requisitos:
 - Java 21 ou superior
-- Maven 3.8+
+- Maven wrapper (`mvnw`/`mvnw.cmd`) já incluso no projeto
 - Oracle Database (para produção)
 
 ### Execução em Desenvolvimento (H2):
@@ -93,10 +106,15 @@ cd midas-fintech-java
 
 ### Execução em Produção (Oracle):
 ```bash
-# Configure as variáveis de ambiente no `.env` 
+# Configure as variáveis de ambiente no `.env`
 set ORACLE_URL=jdbc:oracle:thin:@//seu_host:1521/seu_servico
 set ORACLE_USER=seu_usuario
 set ORACLE_PASSWORD=sua_senha
+set JWT_SECRET=seu_segredo_com_32_chars_ou_mais
+set SECURITY_OAUTH2_GITHUB_ENABLED=true
+set SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS=seu_login_github_admin
+set GITHUB_OAUTH2_CLIENT_ID=seu_client_id
+set GITHUB_OAUTH2_CLIENT_SECRET=seu_client_secret
 
 # Execute com Oracle
 .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=prod
@@ -104,6 +122,7 @@ set ORACLE_PASSWORD=sua_senha
 
 # Execute os endpoints via collection Postman/Insomnia:
 - Importe o arquivo `docs/midas-api-collection.json`
+- Execute primeiro a pasta `Auth` para preencher `accessToken` e `refreshToken`
 - Teste todos os endpoints com exemplos de requisições
 - Valide a persistência e recuperação de dados
 - Verifique os status codes retornados
@@ -121,6 +140,53 @@ set ORACLE_PASSWORD=sua_senha
 - **API**: http://localhost:8080/api
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **H2 Console**: http://localhost:8080/h2-console (dev only)
+
+## Segurança da API (JWT)
+
+### Como autenticar
+1. Solicite token em `POST /api/auth/token`:
+
+```json
+{
+  "username": "<seu_usuario>",
+  "password": "<sua_senha>"
+}
+```
+
+2. Use o token nos endpoints da API:
+
+```http
+Authorization: Bearer <seu_token>
+```
+
+### Observações importantes
+- Endpoints `/api/**` são protegidos por JWT (stateless).
+- Rotas web (`/login`, `/cliente/**`, `/admin/**`) continuam com login de formulário.
+- Login via GitHub OAuth2 pode ser habilitado por variável de ambiente.
+- O endpoint de token possui rate limit para reduzir tentativas de força bruta.
+
+### Variáveis de ambiente de segurança
+- `JWT_SECRET` (obrigatória fora do profile dev): mínimo de 32 caracteres.
+- `JWT_PREVIOUS_SECRETS` (opcional): segredos antigos separados por vírgula para rotação sem derrubar sessões imediatamente.
+- `JWT_EXPIRATION_MINUTES` (opcional): expiração do token em minutos (default: 120).
+- `AUTH_RATE_LIMIT_MAX_ATTEMPTS` (opcional): limite de tentativas por janela (default: 10).
+- `AUTH_RATE_LIMIT_WINDOW_SECONDS` (opcional): janela do rate limit em segundos (default: 60).
+
+### Variáveis de ambiente para OAuth2 GitHub (Web)
+- `SECURITY_OAUTH2_GITHUB_ENABLED` (`true/false`): habilita login social no `/login`.
+- `SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS`: logins GitHub que receberão papel ADMIN.
+- `GITHUB_OAUTH2_CLIENT_ID`: client id da OAuth App no GitHub.
+- `GITHUB_OAUTH2_CLIENT_SECRET`: client secret da OAuth App no GitHub.
+
+## Frontend Web (Thymeleaf)
+
+Páginas implementadas para apresentação FIAP:
+- `/login`
+- `/cliente/dashboard`
+- `/cliente/transferencia`
+- `/admin/painel`
+
+Todas utilizam o estilo compartilhado em `src/main/resources/static/css/midas-ui.css`, com responsividade e feedback visual de validação/erros.
 
 ## 📚 Documentação da API (Swagger/OpenAPI)
 
@@ -195,15 +261,16 @@ Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
 
 | Atividade | Responsável | Prazo | Status |
 |-----------|-------------|-------|--------|
-| Modelagem de Dados e DER | Barbara | 26/09 - 28/09 | ✅ Concluído |
-| Entidades JPA e Mapeamentos | Vinicius | 29/09 - 01/10 | ✅ Concluído |
-| Repositories com Generics | Vinicius | 02/10 - 03/10 | ✅ Concluído |
-| Services e Regras de Negócio | Vinicius | 04/10 - 05/10 | ✅ Concluído |
-| Controllers REST Nível 1 | Vinicius | 06/10 - 07/10 | ✅ Concluído |
-| Testes Automatizados | Barbara | 08/10 - 09/10 | ✅ Concluído |
-| Documentação e Collection | Barbara | 09/10 - 10/10 | ✅ Concluído |
+| Planejamento da Sprint 3 e revisão de requisitos FIAP | Equipe | 10/02 - 14/02 | ✅ Concluído |
+| Segurança web e API (Spring Security + JWT) | Vinicius | 15/02 - 24/02 | ✅ Concluído |
+| Fluxo CLIENT (transferência com validações) | Vinicius | 25/02 - 06/03 | ✅ Concluído |
+| Fluxo ADMIN (estorno com restrição de acesso) | Vinicius | 07/03 - 14/03 | ✅ Concluído |
+| OAuth2 GitHub opcional e configuração por ambiente | Vinicius | 15/03 - 22/03 | ✅ Concluído |
+| Atualização frontend Thymeleaf (login/dashboard/transfer/admin) | Equipe | 23/03 - 30/03 | ✅ Concluído |
+| Atualização de docs, diagramas e coleção de testes | Barbara | 31/03 - 08/04 | ✅ Concluído |
+| Validação final e preparação da entrega | Equipe | 09/04 - 10/04 | ✅ Concluído |
 
-**Sprint:** 26/09/2025 - 10/10/2025
+**Sprint 3:** 10/02/2026 - 10/04/2026
 
 ## 🎥 Vídeos
 
@@ -227,29 +294,36 @@ Apresentação da Proposta Tecnológica
 
 ```text
 midas-fintech-java/
+├── Dockerfile
+├── .dockerignore
 ├── src/main/java/com/fiap/midasfintech/
-│   ├── entity/          # Entidades JPA (Account, Transaction)
-│   ├── repository/      # Repositories com Generics
-│   ├── service/         # Regras de Negócio e Validações
-│   ├── controller/      # REST Controllers
-│   ├── dto/            # DTOs Request/Response
-│   └── config/         # Configurações (Swagger, Exception Handler)
+│   ├── config/          # Security, Swagger, handlers, seeds
+│   ├── controller/      # REST + controllers de área web
+│   ├── dto/             # DTOs request/response
+│   ├── entity/          # Entidades JPA (financeiro + segurança)
+│   ├── repository/      # Repositórios JPA
+│   ├── security/        # JWT, OAuth2, filtros e rate limit
+│   └── service/         # Regras de negócio e fluxos FIAP
 ├── src/main/resources/
-│   ├── application.yaml      # Configuração principal
-│   ├── application-dev.yaml  # Profile H2
-│   ├── application-prod.yaml # Profile Oracle
-│   └── data.sql             # Dados iniciais
+│   ├── application.yaml
+│   ├── application-dev.yaml
+│   ├── application-prod.yaml
+│   ├── application-azure.yaml
+│   ├── logback-spring.xml
+│   ├── db/migration/         # V1 e V2 (Flyway)
+│   ├── static/css/midas-ui.css
+│   └── templates/            # login, dashboard, transferência, admin
 ├── src/test/java/           # Testes unitários e integração
 ├── docs/
 │   ├── cronograma-desenvolvimento.md
-│   ├── verificacao-conformidade.md
-│   ├── diagrams/       # DER e Diagrama de Classes
-│   └── midas-api-collection.json # Collection Postman
+│   ├── diagrams/            # Mermaid + PNGs de arquitetura
+│   ├── midas-api-collection.json
+│   └── test-api.http
 └── README.md          # Esta documentação
 ```
 
 ## 📄 Licença
 
-[Midas Fintech - Todos os direitos reservados](LICENSE)
+[Licença Proprietária Acadêmica - Midas Fintech](LICENSE)
 
 ### © 2025 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados

@@ -1,8 +1,30 @@
 @baseUrl = http://localhost:8080
+@username = <seu_usuario>
+@password = <sua_senha>
+
+### Auth - Emitir Token
+POST {{baseUrl}}/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {%
+client.global.set("accessToken", response.body.token);
+client.global.set("refreshToken", response.body.refreshToken);
+client.test("Token emitido", function() {
+  client.assert(response.status === 200, "Expected 200");
+  client.assert(!!response.body.token, "Missing access token");
+  client.assert(!!response.body.refreshToken, "Missing refresh token");
+});
+%}
 
 ### Create Account
 POST {{baseUrl}}/api/accounts
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "nome": "Conta Principal",
@@ -13,6 +35,7 @@ Content-Type: application/json
 
 ### Get All Accounts
 GET {{baseUrl}}/api/accounts
+Authorization: Bearer {{accessToken}}
 
 > {% 
 client.test("Accounts collection is HAL with _links and _embedded", function() {
@@ -24,6 +47,7 @@ client.test("Accounts collection is HAL with _links and _embedded", function() {
 
 ### Get Account by ID
 GET {{baseUrl}}/api/accounts/{{accountId}}
+Authorization: Bearer {{accessToken}}
 
 > {% 
 client.test("Account has HATEOAS links", function() {
@@ -39,6 +63,7 @@ client.test("Account has HATEOAS links", function() {
 ### Update Account
 PUT {{baseUrl}}/api/accounts/{{accountId}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "nome": "Conta Principal Atualizada",
@@ -48,6 +73,7 @@ Content-Type: application/json
 ### Create Transaction - Receita
 POST {{baseUrl}}/api/transactions
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "valor": 500.00,
@@ -62,6 +88,7 @@ Content-Type: application/json
 ### Create Transaction - Despesa
 POST {{baseUrl}}/api/transactions
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "valor": 150.00,
@@ -75,6 +102,7 @@ Content-Type: application/json
 
 ### Get All Transactions
 GET {{baseUrl}}/api/transactions
+Authorization: Bearer {{accessToken}}
 
 > {% 
 client.test("Transactions collection is HAL", function() {
@@ -86,6 +114,7 @@ client.test("Transactions collection is HAL", function() {
 
 ### Get Transaction by ID
 GET {{baseUrl}}/api/transactions/{{transactionId1}}
+Authorization: Bearer {{accessToken}}
 
 > {% 
 client.test("Transaction has HATEOAS links", function() {
@@ -101,6 +130,7 @@ client.test("Transaction has HATEOAS links", function() {
 
 ### Get Transactions by Account ID
 GET {{baseUrl}}/api/transactions/account/{{accountId}}
+Authorization: Bearer {{accessToken}}
 
 > {% 
 client.test("Account transactions collection has links", function() {
@@ -112,10 +142,12 @@ client.test("Account transactions collection has links", function() {
 
 ### Get Transactions by Account ID (Paged)
 GET {{baseUrl}}/api/transactions/account/{{accountId}}/paged?page=0&size=10&sort=data,desc
+Authorization: Bearer {{accessToken}}
 
 ### Update Transaction
 PUT {{baseUrl}}/api/transactions/{{transactionId1}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "valor": 600.00,
@@ -127,9 +159,36 @@ Content-Type: application/json
 
 ### Delete Transaction 1
 DELETE {{baseUrl}}/api/transactions/{{transactionId1}}
+Authorization: Bearer {{accessToken}}
 
 ### Delete Transaction 2
 DELETE {{baseUrl}}/api/transactions/{{transactionId2}}
+Authorization: Bearer {{accessToken}}
 
 ### Delete Account (after transactions)
 DELETE {{baseUrl}}/api/accounts/{{accountId}}
+Authorization: Bearer {{accessToken}}
+
+### Auth - Refresh Token
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+> {%
+client.global.set("accessToken", response.body.token);
+client.global.set("refreshToken", response.body.refreshToken);
+client.test("Refresh executado", function() {
+  client.assert(response.status === 200, "Expected 200");
+});
+%}
+
+### Auth - Logout
+POST {{baseUrl}}/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}

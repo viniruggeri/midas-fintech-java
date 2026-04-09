@@ -39,6 +39,22 @@
 
 ---
 
+### 📅 **Planejamento da Sprint 3**
+**Período:** 10/02/2026 - 10/04/2026 (60 dias)
+
+| **Data** | **Atividade** | **Responsável** | **Status** | **Entregáveis** |
+|----------|---------------|-----------------|------------|-----------------|
+| **10/02 - 14/02** | Refinamento de requisitos FIAP e planejamento da sprint | Equipe | ✅ Concluído | Backlog da Sprint 3, critérios de aceite |
+| **15/02 - 24/02** | Implementação de segurança (Spring Security + JWT) | Vinicius | ✅ Concluído | Cadeias de segurança web/api, filtros JWT |
+| **25/02 - 06/03** | Fluxo CLIENT completo (transferência com validações) | Vinicius | ✅ Concluído | Fluxo funcional de transferência e validações de negócio |
+| **07/03 - 14/03** | Fluxo ADMIN completo (estorno com trilha segura) | Vinicius | ✅ Concluído | Estorno administrativo com restrição de acesso |
+| **15/03 - 22/03** | OAuth2 GitHub opcional e configuração por ambiente | Vinicius | ✅ Concluído | Login social opcional e variáveis de ambiente documentadas |
+| **23/03 - 30/03** | Atualização do frontend Thymeleaf | Equipe | ✅ Concluído | Telas login/dashboard/transferência/admin atualizadas |
+| **31/03 - 08/04** | Atualização de documentação, diagramas e collection | Barbara | ✅ Concluído | README, cronograma, diagramas PNG, Postman e HTTP tests |
+| **09/04 - 10/04** | Validação final de testes e entrega da sprint | Equipe | ✅ Concluído | Suíte de testes verde e pacote de entrega final |
+
+---
+
 ### 📋 **Detalhamento das Responsabilidades por Membro - Sprint 2**
 
 #### **Vinicius** - Tech Lead / IA Engineer
@@ -127,13 +143,7 @@
 
 ---
 
-### 🚀 **Roadmap Futuro (Sprint 3 e 4)**
-
-#### Sprint 3 (Planejada):
-- Autenticação e Autorização (Spring Security + JWT)
-- Cache com Redis
-- Paginação avançada com HATEOAS
-- Filtros e busca avançada
+### 🚀 **Roadmap Futuro (Sprint 4 e 5)**
 
 #### Sprint 4 (Planejada):
 - Mensageria (RabbitMQ/Kafka)
@@ -141,8 +151,14 @@
 - Circuit Breaker (Resilience4j)
 - Integração completa com IA/RAG
 
+#### Sprint 5 (Planejada):
+- Cache com Redis para leitura intensiva
+- Paginação avançada com filtros combinados
+- Hardening de segurança para produção
+- Melhorias de performance e custo em cloud
+
 ---
 
-**Última Atualização:** 02/11/2025  
-**Versão do Documento:** 2.0  
-**Status Geral:** ✅ Sprint 2 Completa - Pronto para Apresentação
+**Última Atualização:** 10/04/2026  
+**Versão do Documento:** 3.0  
+**Status Geral:** ✅ Sprint 3 Completa - Pronto para Apresentação

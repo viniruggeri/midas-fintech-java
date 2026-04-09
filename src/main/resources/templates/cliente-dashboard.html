@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Cliente</title>
+    <link rel="stylesheet" th:href="@{/css/midas-ui.css}" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="topbar">
+        <div>
+          <span class="badge">Cliente</span>
+          <h1 class="hero-title" style="margin-top: 8px">Painel Financeiro</h1>
+          <p class="subtitle">Acompanhe saldos e execute transferências entre contas.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-secondary btn-link" th:href="@{/cliente/transferencia}">Nova transferência</a>
+          <form th:action="@{/logout}" method="post" style="margin: 0">
+            <button type="submit">Sair</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-body">
+          <h2 class="section-title">Contas cadastradas</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nome</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="conta : ${contas}">
+                  <td th:text="${conta.id}">1</td>
+                  <td th:text="${conta.nome}">Conta</td>
+                  <td th:text="${conta.saldo}">0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
