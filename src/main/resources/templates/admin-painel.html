@@ -4,115 +4,79 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Painel Admin</title>
-    <style>
-      body {
-        font-family: Verdana, sans-serif;
-        margin: 0;
-        background: #f8f8fb;
-      }
-      .container {
-        max-width: 1000px;
-        margin: 24px auto;
-        padding: 0 16px;
-      }
-      .card {
-        background: #fff;
-        padding: 16px;
-        border-radius: 8px;
-        margin-bottom: 16px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: #fff;
-      }
-      th,
-      td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        font-size: 14px;
-      }
-      label {
-        display: block;
-        margin: 8px 0 4px;
-        font-weight: bold;
-      }
-      input {
-        width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-      }
-      button {
-        margin-top: 10px;
-        padding: 10px 14px;
-        background: #7a1e1e;
-        border: 0;
-        color: #fff;
-        cursor: pointer;
-      }
-      .msg {
-        padding: 10px;
-        border-radius: 6px;
-        margin-bottom: 12px;
-      }
-      .erro {
-        background: #ffe8e8;
-        color: #a52222;
-      }
-      .ok {
-        background: #e7f8ea;
-        color: #1f7a2d;
-      }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/midas-ui.css}" />
   </head>
   <body>
-    <div class="container">
-      <h2>Painel Administrativo</h2>
+    <main class="page-shell">
+      <section class="topbar">
+        <div>
+          <span class="badge">Admin</span>
+          <h1 class="hero-title" style="margin-top: 8px">Painel Administrativo</h1>
+          <p class="subtitle">Acompanhe movimentações e execute estorno com trilha de auditoria.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-secondary btn-link" th:href="@{/cliente/dashboard}">Ir para visão cliente</a>
+          <form th:action="@{/logout}" method="post" style="margin: 0">
+            <button type="submit">Sair</button>
+          </form>
+        </div>
+      </section>
 
-      <div class="card">
-        <div th:if="${error}" class="msg erro" th:text="${error}"></div>
-        <div th:if="${success}" class="msg ok" th:text="${success}"></div>
+      <section class="card" style="margin-bottom: 16px">
+        <div class="card-body">
+          <h2 class="section-title">Executar estorno</h2>
+          <div th:if="${error}" class="msg erro" th:text="${error}"></div>
+          <div th:if="${success}" class="msg ok" th:text="${success}"></div>
 
-        <form
-          th:action="@{/admin/estorno}"
-          th:object="${estornoForm}"
-          method="post"
-        >
-          <label for="transacaoId">ID da transação</label>
-          <input id="transacaoId" type="number" th:field="*{transacaoId}" />
+          <form th:action="@{/admin/estorno}" th:object="${estornoForm}" method="post">
+            <div class="grid grid-2">
+              <div class="field">
+                <label for="transacaoId">ID da transação</label>
+                <input id="transacaoId" type="number" th:field="*{transacaoId}" />
+                <div class="field-erro" th:if="${#fields.hasErrors('transacaoId')}" th:errors="*{transacaoId}"></div>
+              </div>
 
-          <label for="motivo">Motivo</label>
-          <input id="motivo" type="text" th:field="*{motivo}" />
+              <div class="field">
+                <label for="motivo">Motivo</label>
+                <input id="motivo" type="text" th:field="*{motivo}" />
+                <div class="field-erro" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}"></div>
+              </div>
+            </div>
 
-          <button type="submit">Executar estorno</button>
-        </form>
-      </div>
+            <button class="btn btn-danger" type="submit">Executar estorno</button>
+          </form>
+        </div>
+      </section>
 
-      <div class="card">
-        <h3>Últimas transações</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Conta</th>
-              <th>Tipo</th>
-              <th>Valor</th>
-              <th>Data</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="tx : ${transacoes}">
-              <td th:text="${tx.id}">1</td>
-              <td th:text="${tx.account.nome}">Conta</td>
-              <td th:text="${tx.tipo}">RECEITA</td>
-              <td th:text="${tx.valor}">0.00</td>
-              <td th:text="${tx.data}">2026-01-01T10:00</td>
-              <td th:text="${tx.descricao}">descricao</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <section class="card">
+        <div class="card-body">
+          <h2 class="section-title">Últimas transações</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Conta</th>
+                  <th>Tipo</th>
+                  <th>Valor</th>
+                  <th>Data</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="tx : ${transacoes}">
+                  <td th:text="${tx.id}">1</td>
+                  <td th:text="${tx.account.nome}">Conta</td>
+                  <td th:text="${tx.tipo}">RECEITA</td>
+                  <td th:text="${tx.valor}">0.00</td>
+                  <td th:text="${tx.data}">2026-01-01T10:00</td>
+                  <td th:text="${tx.descricao}">descricao</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

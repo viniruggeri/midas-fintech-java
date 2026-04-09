@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant C as Cliente API
+    participant Auth as AuthController
+    participant AM as AuthenticationManager
+    participant JWT as JwtService
+    participant RT as RefreshTokenService
+
+    C->>Auth: POST /api/auth/token (username, password)
+    Auth->>AM: autenticar credenciais
+    AM-->>Auth: autenticado
+    Auth->>JWT: gerar access token
+    Auth->>RT: criar refresh token
+    Auth-->>C: token + refreshToken
+
+    C->>Auth: POST /api/auth/refresh (refreshToken)
+    Auth->>RT: validar e rotacionar token
+    Auth->>JWT: gerar novo access token
+    Auth-->>C: novo token + novo refreshToken
+
+    C->>Auth: POST /api/auth/logout (refreshToken)
+    Auth->>RT: revogar refresh token
+    Auth-->>C: 204 No Content

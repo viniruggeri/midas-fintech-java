@@ -4,90 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Cliente</title>
-    <style>
-      body {
-        font-family: Verdana, sans-serif;
-        margin: 0;
-        background: #f7fafc;
-      }
-      header {
-        background: #184d47;
-        color: #fff;
-        padding: 16px 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      main {
-        max-width: 900px;
-        margin: 24px auto;
-        padding: 0 16px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: #fff;
-      }
-      th,
-      td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-      }
-      a.button {
-        display: inline-block;
-        margin-right: 10px;
-        padding: 10px 14px;
-        background: #184d47;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 4px;
-      }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/midas-ui.css}" />
   </head>
   <body>
-    <header>
-      <strong>Área do Cliente</strong>
-      <form th:action="@{/logout}" method="post" style="margin: 0">
-        <button
-          type="submit"
-          style="
-            background: #fff;
-            color: #184d47;
-            border: 0;
-            padding: 8px 12px;
-            cursor: pointer;
-          "
-        >
-          Sair
-        </button>
-      </form>
-    </header>
-    <main>
-      <h2>Contas</h2>
+    <main class="page-shell">
+      <section class="topbar">
+        <div>
+          <span class="badge">Cliente</span>
+          <h1 class="hero-title" style="margin-top: 8px">Painel Financeiro</h1>
+          <p class="subtitle">Acompanhe saldos e execute transferências entre contas.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-secondary btn-link" th:href="@{/cliente/transferencia}">Nova transferência</a>
+          <form th:action="@{/logout}" method="post" style="margin: 0">
+            <button type="submit">Sair</button>
+          </form>
+        </div>
+      </section>
 
-      <p>
-        <a class="button" th:href="@{/cliente/transferencia}"
-          >Nova transferência</a
-        >
-      </p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Saldo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="conta : ${contas}">
-            <td th:text="${conta.id}">1</td>
-            <td th:text="${conta.nome}">Conta</td>
-            <td th:text="${conta.saldo}">0.00</td>
-          </tr>
-        </tbody>
-      </table>
+      <section class="card">
+        <div class="card-body">
+          <h2 class="section-title">Contas cadastradas</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nome</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="conta : ${contas}">
+                  <td th:text="${conta.id}">1</td>
+                  <td th:text="${conta.nome}">Conta</td>
+                  <td th:text="${conta.saldo}">0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>

@@ -3,6 +3,19 @@ spring:
     active: dev
   application:
     name: midas-api
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_OAUTH2_CLIENT_ID:midas-disabled-client-id}
+            client-secret: ${GITHUB_OAUTH2_CLIENT_SECRET:midas-disabled-client-secret}
+            scope:
+              - read:user
+              - user:email
+        provider:
+          github:
+            user-name-attribute: login
 
 security:
   jwt:
@@ -13,6 +26,9 @@ security:
     rate-limit:
       max-attempts: ${AUTH_RATE_LIMIT_MAX_ATTEMPTS:10}
       window-seconds: ${AUTH_RATE_LIMIT_WINDOW_SECONDS:60}
+  oauth2:
+    github-enabled: ${SECURITY_OAUTH2_GITHUB_ENABLED:false}
+    admin-github-logins: ${SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS:}
 
 server:
   port: 8080
@@ -22,7 +38,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics
 
 springdoc:
   api-docs:

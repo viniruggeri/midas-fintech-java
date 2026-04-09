@@ -30,6 +30,10 @@ security:
     secret: dev-only-secret-key-with-32-chars-minimum
     previous-secrets:
 
+# Para testar OAuth2 GitHub localmente, use:
+# SECURITY_OAUTH2_GITHUB_ENABLED=true,
+# GITHUB_OAUTH2_CLIENT_ID e GITHUB_OAUTH2_CLIENT_SECRET.
+
 
 logging:
   level:

@@ -22,6 +22,9 @@ spring:
       enabled: false
 
 # Em Azure, JWT_SECRET deve ser definido via Application Settings.
+# Para OAuth2 GitHub em Azure, definir nas Application Settings:
+# GITHUB_OAUTH2_CLIENT_ID, GITHUB_OAUTH2_CLIENT_SECRET,
+# SECURITY_OAUTH2_GITHUB_ENABLED=true e SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS.
 
 logging:
   level:
