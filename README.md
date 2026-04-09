@@ -17,8 +17,8 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 | Nome | Função | RM        | Responsabilidade no Projeto |
 |------|--------|-----------|---------------------------|
 | **Vinicius** | Tech Lead / IA Engineer | 560593    | Desenvolvimento Java/Spring Boot, Arquitetura da API, Serviços de IA com RAG |
-| **Barbara** | Cloud/QA Engineer | RM Barbara | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
-| **Yasmin** | Mobile/Backend Developer | RM Yasmin | Mobile Development, .NET Development, Integração com API |
+| **Barbara** | Cloud/QA Engineer | RM 560431 | Cloud Azure, QA/Testes, Compliance, Modelagem e Administração de Database |
+| **Yasmin** | Mobile/Backend Developer | RM 560039 | Mobile Development, .NET Development, Integração com API |
 
 ## 🏗️ Arquitetura da Aplicação
 
@@ -130,7 +130,7 @@ set GITHUB_OAUTH2_CLIENT_SECRET=seu_client_secret
 - Ajuste os dados conforme necessário para seus testes
 
 # Ou execute via test-api.http via HTTP Client do IntelliJ (versão paga):
-- Use o arquivo `docs/test-api.http`
+- Importe o arquivo `docs/test-api.http`
 - Teste todos os endpoints com exemplos de requisições
 - Valide a persistência e recuperação de dados
 - Verifique os status codes retornados
@@ -272,19 +272,27 @@ Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
 
 **Sprint 3:** 10/02/2026 - 10/04/2026
 
-## 🎥 Vídeo de Apresentação
+## 🎥 Vídeos
 
-[Link para vídeo] - Apresentação da Proposta Tecnológica:
-- **Público-alvo**: Pessoas físicas que desejam controlar suas finanças pessoais
-- **Problemas solucionados**: 
-  - Controle descentralizado de contas bancárias
-  - Falta de visibilidade sobre receitas e despesas
-  - Dificuldade para acompanhar transações financeiras
-  - Necessidade de dados estruturados para análises
+- Apresentação geral: [apresentação](https://youtu.be/UR1eIVgAwuE)
+- Evolução Sprint 2: [evolução sp2](https://youtu.be/IxnOknQVfv8)
+
+Apresentação da Proposta Tecnológica
+
+### Público-alvo
+
+- Pessoas físicas que desejam controlar suas finanças pessoais
+
+### Problemas solucionados
+
+- Controle descentralizado de contas bancárias
+- Falta de visibilidade sobre receitas e despesas
+- Dificuldade para acompanhar transações financeiras
+- Necessidade de dados estruturados para análises
 
 ## 📁 Estrutura do Repositório
 
-```
+```text
 midas-fintech-java/
 ├── Dockerfile
 ├── .dockerignore
@@ -318,4 +326,4 @@ midas-fintech-java/
 
 [Licença Proprietária Acadêmica - Midas Fintech](LICENSE)
 
-#### © 2026 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados.
+### © 2025 Vinicius, Barbara, Yasmin - Midas Fintech - Todos os direitos reservados
