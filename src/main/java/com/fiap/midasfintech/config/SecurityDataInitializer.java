@@ -30,11 +30,11 @@ public class SecurityDataInitializer implements CommandLineRunner {
         Role clientRole = roleRepository.findByNome("ROLE_CLIENT")
                 .orElseGet(() -> roleRepository.save(createRole("ROLE_CLIENT")));
 
-        String adminUsername = getPropertyOrDefault("midas.demo.admin.username", "midas-admin");
-        String adminPassword = getPropertyOrDefault("midas.demo.admin.password", "midas-change-me-admin");
+        String adminUsername = getPropertyOrDefault("midas.demo.admin.username", "midas-admin-local");
+        String adminPassword = getPropertyOrDefault("midas.demo.admin.password", "MidasLocal@Admin2026");
 
-        String clientUsername = getPropertyOrDefault("midas.demo.client.username", "midas-client");
-        String clientPassword = getPropertyOrDefault("midas.demo.client.password", "midas-change-me-client");
+        String clientUsername = getPropertyOrDefault("midas.demo.client.username", "midas-client-local");
+        String clientPassword = getPropertyOrDefault("midas.demo.client.password", "MidasLocal@Client2026");
 
         appUserRepository.findByUsername(adminUsername)
                 .orElseGet(() -> appUserRepository.save(createUser(adminUsername, adminPassword, Set.of(adminRole))));

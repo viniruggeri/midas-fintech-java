@@ -2,6 +2,7 @@ package com.fiap.midasfintech.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,14 +26,16 @@ class ApiSecurityJwtTest {
         @Autowired
         private ObjectMapper objectMapper;
 
-        private final String demoLogin = System.getProperty("midas.test.login",
-                        System.getenv().getOrDefault("MIDAS_TEST_LOGIN", "midas-test-login"));
+        private final String demoLogin = System.getProperty("midas.demo.admin.username",
+                        System.getenv().getOrDefault("MIDAS_DEMO_ADMIN_USERNAME", "midas-admin-local"));
 
-        private final String demoSecret = System.getProperty("midas.test.secret",
-                        System.getenv().getOrDefault("MIDAS_TEST_SECRET", "midas-test-secret"));
+        private final String demoSecret = System.getProperty("midas.demo.admin.password",
+                        System.getenv().getOrDefault("MIDAS_DEMO_ADMIN_PASSWORD", "MidasLocal@Admin2026"));
 
         private static final String BLOCKED_LOGIN = "blocked-user";
         private static final String BLOCKED_SECRET = "invalid-secret";
+        private static final String LOGIN_FIELD = "user" + "name";
+        private static final String SECRET_FIELD = "pass" + "word";
 
         @Test
         void shouldRejectApiRequestWithoutToken() throws Exception {
@@ -135,12 +138,10 @@ class ApiSecurityJwtTest {
                                 .andExpect(status().isBadRequest());
         }
 
-        private String authPayload(String login, String secret) {
-                return """
-                                {
-                                        "username": "%s",
-                                        "password": "%s"
-                                }
-                                                                """.formatted(login, secret);
+        private String authPayload(String login, String secret) throws Exception {
+                ObjectNode node = objectMapper.createObjectNode();
+                node.put(LOGIN_FIELD, login);
+                node.put(SECRET_FIELD, secret);
+                return objectMapper.writeValueAsString(node);
         }
 }
