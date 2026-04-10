@@ -28,7 +28,9 @@ Authorization: Bearer {{accessToken}}
 
 {
   "nome": "Conta Principal",
-  "saldo": 1000.00
+  "saldo": 1000.00,
+  "emailNotificacao": "contaprincipal@midas.local",
+  "telefoneSms": "+5511998887777"
 }
 
 > {% client.global.set("accountId", response.body.id); %}
@@ -67,7 +69,9 @@ Authorization: Bearer {{accessToken}}
 
 {
   "nome": "Conta Principal Atualizada",
-  "saldo": 1500.00
+  "saldo": 1500.00,
+  "emailNotificacao": "contaprincipal.atualizada@midas.local",
+  "telefoneSms": "+5511998886666"
 }
 
 ### Create Transaction - Receita

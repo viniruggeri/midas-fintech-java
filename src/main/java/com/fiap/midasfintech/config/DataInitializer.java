@@ -30,11 +30,15 @@ public class DataInitializer implements CommandLineRunner {
             Account contaCorrente = new Account();
             contaCorrente.setNome("Conta Corrente");
             contaCorrente.setSaldo(new BigDecimal("1000.00"));
+            contaCorrente.setEmailNotificacao("contacorrente@midas.local");
+            contaCorrente.setTelefoneSms("+5511990000001");
             contaCorrente = accountRepository.save(contaCorrente);
 
             Account contaPoupanca = new Account();
             contaPoupanca.setNome("Conta Poupança");
             contaPoupanca.setSaldo(new BigDecimal("5000.00"));
+            contaPoupanca.setEmailNotificacao("contapoupanca@midas.local");
+            contaPoupanca.setTelefoneSms("+5511990000002");
             contaPoupanca = accountRepository.save(contaPoupanca);
 
             // Criar transações

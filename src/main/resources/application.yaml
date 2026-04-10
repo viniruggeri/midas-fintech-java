@@ -3,6 +3,11 @@ spring:
     active: dev
   application:
     name: midas-api
+  artemis:
+    mode: embedded
+    embedded:
+      enabled: true
+      persistent: false
   security:
     oauth2:
       client:
@@ -19,7 +24,7 @@ spring:
 
 security:
   jwt:
-    secret: ${JWT_SECRET}
+    secret: ${JWT_SECRET:dev-only-secret-key-with-32-chars-minimum}
     previous-secrets: ${JWT_PREVIOUS_SECRETS:}
     expiration-minutes: ${JWT_EXPIRATION_MINUTES:120}
   auth:
@@ -29,6 +34,12 @@ security:
   oauth2:
     github-enabled: ${SECURITY_OAUTH2_GITHUB_ENABLED:false}
     admin-github-logins: ${SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS:}
+
+midas:
+  messaging:
+    estorno-queue: ${MIDAS_ESTORNO_QUEUE:estorno.notificacao.queue}
+  notification:
+    base-url: ${MIDAS_NOTIFICATION_BASE_URL:http://localhost:${server.port:8080}}
 
 server:
   port: 8080

@@ -2,6 +2,7 @@ package com.fiap.midasfintech.service.impl;
 
 import com.fiap.midasfintech.entity.Account;
 import com.fiap.midasfintech.entity.Transaction;
+import com.fiap.midasfintech.messaging.EstornoNotificacaoPublisher;
 import com.fiap.midasfintech.repository.AccountRepository;
 import com.fiap.midasfintech.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,9 @@ class FluxoFinanceiroServiceImplTest {
 
     @Mock
     private TransactionRepository transactionRepository;
+
+    @Mock
+    private EstornoNotificacaoPublisher estornoNotificacaoPublisher;
 
     @InjectMocks
     private FluxoFinanceiroServiceImpl fluxoFinanceiroService;
@@ -105,6 +109,8 @@ class FluxoFinanceiroServiceImplTest {
         assertEquals(new BigDecimal("1200.00"), contaOrigem.getSaldo());
         verify(accountRepository).save(contaOrigem);
         verify(transactionRepository).save(any(Transaction.class));
+        verify(estornoNotificacaoPublisher).publicarEstornoAprovado(any(Transaction.class), any(Transaction.class),
+                any(Account.class), contains("Compra cancelada"));
     }
 
     @Test
@@ -117,5 +123,6 @@ class FluxoFinanceiroServiceImplTest {
 
         assertEquals("Esta transação já foi estornada", exception.getMessage());
         verify(transactionRepository, never()).save(any(Transaction.class));
+        verify(estornoNotificacaoPublisher, never()).publicarEstornoAprovado(any(), any(), any(), any());
     }
 }

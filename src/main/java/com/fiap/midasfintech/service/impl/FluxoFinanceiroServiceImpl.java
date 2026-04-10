@@ -2,6 +2,7 @@ package com.fiap.midasfintech.service.impl;
 
 import com.fiap.midasfintech.entity.Account;
 import com.fiap.midasfintech.entity.Transaction;
+import com.fiap.midasfintech.messaging.EstornoNotificacaoPublisher;
 import com.fiap.midasfintech.repository.AccountRepository;
 import com.fiap.midasfintech.repository.TransactionRepository;
 import com.fiap.midasfintech.service.FluxoFinanceiroService;
@@ -21,6 +22,7 @@ public class FluxoFinanceiroServiceImpl implements FluxoFinanceiroService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final EstornoNotificacaoPublisher estornoNotificacaoPublisher;
 
     @Override
     public void realizarTransferencia(Long contaOrigemId, Long contaDestinoId, BigDecimal valor, String descricao) {
@@ -108,6 +110,8 @@ public class FluxoFinanceiroServiceImpl implements FluxoFinanceiroService {
         estorno.setDescricao(ESTORNO_PREFIX + transacaoId + " | " + motivo.trim());
         estorno.setAccount(conta);
         transactionRepository.save(estorno);
+
+        estornoNotificacaoPublisher.publicarEstornoAprovado(original, estorno, conta, motivo);
     }
 
     private void validarTransferencia(Long contaOrigemId, Long contaDestinoId, BigDecimal valor) {

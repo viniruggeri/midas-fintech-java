@@ -12,15 +12,28 @@
         <div class="card-body">
           <span class="badge">Midas Fintech</span>
           <h1 class="hero-title" style="margin-top: 10px">Acesse sua área</h1>
-          <p class="subtitle">Login web para perfis ADMIN e CLIENT com opção OAuth2 GitHub.</p>
+          <p class="subtitle">
+            Login web para perfis ADMIN e CLIENT. OAuth2 GitHub é exclusivo para
+            administradores.
+          </p>
 
-          <div th:if="${param.error}" class="msg erro">Usuário ou senha inválidos.</div>
-          <div th:if="${param.logout}" class="msg ok">Logout realizado com sucesso.</div>
+          <div th:if="${param.error}" class="msg erro">
+            Usuário ou senha inválidos.
+          </div>
+          <div th:if="${param.logout}" class="msg ok">
+            Logout realizado com sucesso.
+          </div>
 
           <form th:action="@{/login}" method="post">
             <div class="field">
               <label for="username">Usuário</label>
-              <input id="username" name="username" type="text" required autofocus />
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                autofocus
+              />
             </div>
 
             <div class="field">
@@ -28,17 +41,27 @@
               <input id="password" name="password" type="password" required />
             </div>
 
-            <button class="btn btn-primary btn-wide" type="submit">Entrar com senha</button>
+            <button class="btn btn-primary btn-wide" type="submit">
+              Entrar com senha
+            </button>
           </form>
 
           <p class="helper" style="margin-top: 14px">
-            Demo local: admin/admin123 e cliente/cliente123
+            Credenciais de demo sao definidas por ambiente (MIDAS_DEMO_ADMIN_* e
+            MIDAS_DEMO_CLIENT_*).
           </p>
 
           <div th:if="${githubEnabled}" style="margin-top: 12px">
-            <a class="btn btn-secondary btn-link btn-wide" th:href="@{/oauth2/authorization/github}">
-              Entrar com GitHub
+            <a
+              class="btn btn-secondary btn-link btn-wide"
+              th:href="@{/oauth2/authorization/github}"
+            >
+              Entrar com GitHub (ADMIN)
             </a>
+            <p class="helper" style="margin-top: 8px">
+              Somente logins GitHub cadastrados em
+              SECURITY_OAUTH2_ADMIN_GITHUB_LOGINS podem autenticar por OAuth2.
+            </p>
           </div>
         </div>
       </section>

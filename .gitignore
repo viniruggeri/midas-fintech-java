@@ -91,3 +91,6 @@ application-local.yaml
 
 # fiap 
 /fiap/
+
+#extras
+.venv

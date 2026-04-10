@@ -48,6 +48,7 @@
 | **15/02 - 24/02** | Implementação de segurança (Spring Security + JWT) | Vinicius | ✅ Concluído | Cadeias de segurança web/api, filtros JWT |
 | **25/02 - 06/03** | Fluxo CLIENT completo (transferência com validações) | Vinicius | ✅ Concluído | Fluxo funcional de transferência e validações de negócio |
 | **07/03 - 14/03** | Fluxo ADMIN completo (estorno com trilha segura) | Vinicius | ✅ Concluído | Estorno administrativo com restrição de acesso |
+| **14/03 - 20/03** | Mensageria de estorno + integração Feign de notificação | Vinicius | ✅ Concluído | Evento JMS de estorno, consumer e envio interno email/sms |
 | **15/03 - 22/03** | OAuth2 GitHub opcional e configuração por ambiente | Vinicius | ✅ Concluído | Login social opcional e variáveis de ambiente documentadas |
 | **23/03 - 30/03** | Atualização do frontend Thymeleaf | Equipe | ✅ Concluído | Telas login/dashboard/transferência/admin atualizadas |
 | **31/03 - 08/04** | Atualização de documentação, diagramas e collection | Barbara | ✅ Concluído | README, cronograma, diagramas PNG, Postman e HTTP tests |

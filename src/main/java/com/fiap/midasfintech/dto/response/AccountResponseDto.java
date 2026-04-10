@@ -13,4 +13,6 @@ public class AccountResponseDto extends RepresentationModel<AccountResponseDto> 
     private Long id;
     private String nome;
     private BigDecimal saldo;
+    private String emailNotificacao;
+    private String telefoneSms;
 }
