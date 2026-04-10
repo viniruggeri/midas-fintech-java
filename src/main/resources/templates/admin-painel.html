@@ -11,14 +11,69 @@
       <section class="topbar">
         <div>
           <span class="badge">Admin</span>
-          <h1 class="hero-title" style="margin-top: 8px">Painel Administrativo</h1>
-          <p class="subtitle">Acompanhe movimentações e execute estorno com trilha de auditoria.</p>
+          <h1 class="hero-title" style="margin-top: 8px">
+            Painel Administrativo
+          </h1>
+          <p class="subtitle">
+            Acompanhe movimentações, execute estorno e valide o fluxo fila +
+            Feign em tempo real.
+          </p>
         </div>
         <div class="actions">
-          <a class="btn btn-secondary btn-link" th:href="@{/cliente/dashboard}">Ir para visão cliente</a>
+          <a class="btn btn-secondary btn-link" th:href="@{/cliente/dashboard}"
+            >Ir para visão cliente</a
+          >
           <form th:action="@{/logout}" method="post" style="margin: 0">
             <button type="submit">Sair</button>
           </form>
+        </div>
+      </section>
+
+      <section class="card flow-card" style="margin-bottom: 16px">
+        <div class="card-body">
+          <h2 class="section-title">
+            Demonstração visual: Mensageria + Feign no estorno
+          </h2>
+          <p class="subtitle">
+            Ao estornar uma transação, o sistema publica um evento na fila e o
+            consumidor chama o Feign para enviar notificações de email/SMS.
+          </p>
+
+          <div class="flow-grid">
+            <article class="flow-step">
+              <span class="flow-index">1</span>
+              <h3>Admin estorna</h3>
+              <p>Você envia o formulário com ID da transação e motivo.</p>
+            </article>
+            <article class="flow-step">
+              <span class="flow-index">2</span>
+              <h3>Evento na fila</h3>
+              <p>
+                O serviço publica no destino
+                <strong>estorno.notificacao.queue</strong>.
+              </p>
+            </article>
+            <article class="flow-step">
+              <span class="flow-index">3</span>
+              <h3>Consumer processa</h3>
+              <p>O listener JMS consome o evento e monta a mensagem.</p>
+            </article>
+            <article class="flow-step">
+              <span class="flow-index">4</span>
+              <h3>Feign envia canais</h3>
+              <p>
+                São chamados os endpoints internos de email e SMS conforme os
+                dados da conta.
+              </p>
+            </article>
+          </div>
+
+          <p class="helper" style="margin-top: 12px">
+            Evidências em log esperadas: <strong>AMQ601500</strong> (publish),
+            <strong>AMQ601501</strong> (consume),
+            <strong>EMAIL enviado</strong>, <strong>SMS enviado</strong> e
+            <strong>Notificacoes enviadas para conta ...</strong>.
+          </p>
         </div>
       </section>
 
@@ -28,22 +83,40 @@
           <div th:if="${error}" class="msg erro" th:text="${error}"></div>
           <div th:if="${success}" class="msg ok" th:text="${success}"></div>
 
-          <form th:action="@{/admin/estorno}" th:object="${estornoForm}" method="post">
+          <form
+            th:action="@{/admin/estorno}"
+            th:object="${estornoForm}"
+            method="post"
+          >
             <div class="grid grid-2">
               <div class="field">
                 <label for="transacaoId">ID da transação</label>
-                <input id="transacaoId" type="number" th:field="*{transacaoId}" />
-                <div class="field-erro" th:if="${#fields.hasErrors('transacaoId')}" th:errors="*{transacaoId}"></div>
+                <input
+                  id="transacaoId"
+                  type="number"
+                  th:field="*{transacaoId}"
+                />
+                <div
+                  class="field-erro"
+                  th:if="${#fields.hasErrors('transacaoId')}"
+                  th:errors="*{transacaoId}"
+                ></div>
               </div>
 
               <div class="field">
                 <label for="motivo">Motivo</label>
                 <input id="motivo" type="text" th:field="*{motivo}" />
-                <div class="field-erro" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}"></div>
+                <div
+                  class="field-erro"
+                  th:if="${#fields.hasErrors('motivo')}"
+                  th:errors="*{motivo}"
+                ></div>
               </div>
             </div>
 
-            <button class="btn btn-danger" type="submit">Executar estorno</button>
+            <button class="btn btn-danger" type="submit">
+              Executar estorno
+            </button>
           </form>
         </div>
       </section>
@@ -60,6 +133,8 @@
                   <th>Tipo</th>
                   <th>Valor</th>
                   <th>Data</th>
+                  <th>Email notificação</th>
+                  <th>SMS notificação</th>
                   <th>Descrição</th>
                 </tr>
               </thead>
@@ -70,6 +145,16 @@
                   <td th:text="${tx.tipo}">RECEITA</td>
                   <td th:text="${tx.valor}">0.00</td>
                   <td th:text="${tx.data}">2026-01-01T10:00</td>
+                  <td
+                    th:text="${(tx.account.emailNotificacao != null and !#strings.isEmpty(tx.account.emailNotificacao)) ? tx.account.emailNotificacao : '-'}"
+                  >
+                    email
+                  </td>
+                  <td
+                    th:text="${(tx.account.telefoneSms != null and !#strings.isEmpty(tx.account.telefoneSms)) ? tx.account.telefoneSms : '-'}"
+                  >
+                    sms
+                  </td>
                   <td th:text="${tx.descricao}">descricao</td>
                 </tr>
               </tbody>

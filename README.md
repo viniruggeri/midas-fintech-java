@@ -50,6 +50,8 @@ O sistema resolve o problema de controle financeiro pessoal, permitindo:
 - **Spring Security** - Autenticação e autorização (ADMIN/CLIENT)
 - **OAuth2 Client (GitHub)** - Login social opcional na camada web
 - **JWT (jjwt)** - Segurança stateless para endpoints `/api/**`
+- **Spring JMS (Artemis embutido)** - Fila para eventos de estorno
+- **OpenFeign** - Cliente HTTP para integração de notificação
 - **Spring Data JPA** - Persistência de dados e mapeamento objeto-relacional
 - **Spring Validation** - Validação funcional com Bean Validation
 - **Flyway** - Migrações versionadas de banco de dados
@@ -171,6 +173,8 @@ Authorization: Bearer <seu_token>
 - `JWT_EXPIRATION_MINUTES` (opcional): expiração do token em minutos (default: 120).
 - `AUTH_RATE_LIMIT_MAX_ATTEMPTS` (opcional): limite de tentativas por janela (default: 10).
 - `AUTH_RATE_LIMIT_WINDOW_SECONDS` (opcional): janela do rate limit em segundos (default: 60).
+- `MIDAS_DEMO_ADMIN_USERNAME` e `MIDAS_DEMO_ADMIN_PASSWORD` (opcionais): usuário/senha do perfil ADMIN para demonstração.
+- `MIDAS_DEMO_CLIENT_USERNAME` e `MIDAS_DEMO_CLIENT_PASSWORD` (opcionais): usuário/senha do perfil CLIENT para demonstração.
 
 ### Variáveis de ambiente para OAuth2 GitHub (Web)
 - `SECURITY_OAUTH2_GITHUB_ENABLED` (`true/false`): habilita login social no `/login`.
@@ -187,6 +191,29 @@ Páginas implementadas para apresentação FIAP:
 - `/admin/painel`
 
 Todas utilizam o estilo compartilhado em `src/main/resources/static/css/midas-ui.css`, com responsividade e feedback visual de validação/erros.
+
+## Notificação de Estorno (Fila + Feign)
+
+Após um estorno aprovado no fluxo ADMIN (`/admin/estorno`):
+- A aplicação publica um evento na fila `estorno.notificacao.queue` (JMS).
+- Um consumidor JMS processa o evento e chama integração via Feign para envio de notificação.
+- O envio tenta os canais disponíveis da conta: `emailNotificacao` e `telefoneSms`.
+
+### Fluxo técnico resumido
+1. `FluxoFinanceiroServiceImpl.estornarTransacao(...)` persiste o estorno e publica o evento JMS.
+2. `EstornoNotificacaoConsumer` recebe o evento da fila.
+3. O consumer usa `NotificacaoFeignClient` para chamar endpoints internos de notificação:
+  - `POST /internal/notificacoes/email`
+  - `POST /internal/notificacoes/sms`
+4. Os endpoints internos (`NotificacaoInternaController`) simulam o provedor externo e registram envio em log.
+
+Sim: neste momento o Feign está comunicando com serviço interno da própria aplicação (loopback HTTP), o que atende o requisito técnico de cliente Feign sem aumentar complexidade operacional para a entrega.
+
+Campos adicionais em conta para notificação:
+- `emailNotificacao`
+- `telefoneSms`
+
+Mais detalhes em `docs/mensageria-feign-estorno.md`.
 
 ## 📚 Documentação da API (Swagger/OpenAPI)
 
@@ -237,6 +264,8 @@ Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
 - `TransactionTest` - Validações e enums
 - `AccountServiceImplTest` - Regras de negócio (Mockito)
 - `TransactionServiceImplTest` - Lógica de saldo e validações
+- `FluxoFinanceiroServiceImplTest` - Fluxos de transferência/estorno e publicação de evento
+- `EstornoNotificacaoConsumerTest` - Consumo da fila e disparo de Feign por canal
 
 #### **Testes de Integração:**
 - `AccountRepositoryTest` - Persistência JPA (@DataJpaTest)
@@ -256,6 +285,15 @@ Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
 3. **Validações de Negócio**
 4. **Relacionamentos entre Entidades**
 5. **Persistência e Recuperação de Dados Oracle/H2**
+6. **Fluxo assíncrono de notificação após estorno (JMS + Feign)**
+
+### Execução automatizada da collection (httpx)
+- Script: `docs/run_collection_httpx.py`
+- Exemplo (incluindo cenários negativos e relatório):
+
+```bash
+c:/Users/rugge_p2gkz2r/Desktop/midas-ai/midas-fintech-java/.venv/Scripts/python.exe docs/run_collection_httpx.py --collection docs/midas-api-collection.json --base-url http://localhost:8080 --run-negative --report-json docs/collection-report.json --report-md docs/collection-report.md
+```
 
 ## 📋 Cronograma de Desenvolvimento
 
@@ -301,6 +339,8 @@ midas-fintech-java/
 │   ├── controller/      # REST + controllers de área web
 │   ├── dto/             # DTOs request/response
 │   ├── entity/          # Entidades JPA (financeiro + segurança)
+│   ├── integration/      # Feign clients para integração HTTP
+│   ├── messaging/        # Publicador/consumer JMS de eventos
 │   ├── repository/      # Repositórios JPA
 │   ├── security/        # JWT, OAuth2, filtros e rate limit
 │   └── service/         # Regras de negócio e fluxos FIAP
@@ -310,14 +350,16 @@ midas-fintech-java/
 │   ├── application-prod.yaml
 │   ├── application-azure.yaml
 │   ├── logback-spring.xml
-│   ├── db/migration/         # V1 e V2 (Flyway)
+│   ├── db/migration/         # V1, V2 e V3 (Flyway)
 │   ├── static/css/midas-ui.css
 │   └── templates/            # login, dashboard, transferência, admin
-├── src/test/java/           # Testes unitários e integração
+├── src/test/java/           # Testes unitários, integração e mensageria
 ├── docs/
 │   ├── cronograma-desenvolvimento.md
 │   ├── diagrams/            # Mermaid + PNGs de arquitetura
+│   ├── mensageria-feign-estorno.md
 │   ├── midas-api-collection.json
+│   ├── run_collection_httpx.py
 │   └── test-api.http
 └── README.md          # Esta documentação
 ```

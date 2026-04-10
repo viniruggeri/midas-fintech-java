@@ -244,6 +244,63 @@ th {
   align-items: center;
 }
 
+.flow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -80px -80px auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(11, 107, 107, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.flow-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.flow-step {
+  position: relative;
+  border: 1px solid rgba(24, 34, 47, 0.16);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 14px;
+  min-height: 152px;
+}
+
+.flow-step h3 {
+  margin: 8px 0 6px;
+  font-size: 1rem;
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+}
+
+.flow-step p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.flow-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+}
+
 @keyframes page-enter {
   from {
     opacity: 0;
@@ -260,6 +317,10 @@ th {
     grid-template-columns: 1fr;
   }
 
+  .flow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .page-shell {
     margin: 18px auto;
   }
@@ -271,5 +332,11 @@ th {
   .topbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .flow-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,0 +1,182 @@
+{
+  "generatedAt": "2026-04-10T00:04:58.085361+00:00",
+  "baseUrl": "http://localhost:8080",
+  "summary": {
+    "total": 19,
+    "passed": 19,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "name": "Emitir Token",
+      "method": "POST",
+      "url": "http://localhost:8080/api/auth/token",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Refresh Token",
+      "method": "POST",
+      "url": "http://localhost:8080/api/auth/refresh",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Logout",
+      "method": "POST",
+      "url": "http://localhost:8080/api/auth/logout",
+      "status_code": 204,
+      "expected_status": "204",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Create Account",
+      "method": "POST",
+      "url": "http://localhost:8080/api/accounts",
+      "status_code": 201,
+      "expected_status": "201",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Get All Accounts",
+      "method": "GET",
+      "url": "http://localhost:8080/api/accounts",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Get Account by ID",
+      "method": "GET",
+      "url": "http://localhost:8080/api/accounts/3",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Update Account",
+      "method": "PUT",
+      "url": "http://localhost:8080/api/accounts/3",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Create Transaction - Receita",
+      "method": "POST",
+      "url": "http://localhost:8080/api/transactions",
+      "status_code": 201,
+      "expected_status": "201",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Create Transaction - Despesa",
+      "method": "POST",
+      "url": "http://localhost:8080/api/transactions",
+      "status_code": 201,
+      "expected_status": "201",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Get All Transactions",
+      "method": "GET",
+      "url": "http://localhost:8080/api/transactions",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Get Transaction by ID",
+      "method": "GET",
+      "url": "http://localhost:8080/api/transactions/7",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Get Transactions by Account ID",
+      "method": "GET",
+      "url": "http://localhost:8080/api/transactions/account/3",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Get Transactions by Account ID (Paged)",
+      "method": "GET",
+      "url": "http://localhost:8080/api/transactions/account/3/paged?page=0&size=10&sort=data,desc",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Update Transaction",
+      "method": "PUT",
+      "url": "http://localhost:8080/api/transactions/7",
+      "status_code": 200,
+      "expected_status": "200",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Delete Transaction",
+      "method": "DELETE",
+      "url": "http://localhost:8080/api/transactions/7",
+      "status_code": 204,
+      "expected_status": "204",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "Delete Account",
+      "method": "DELETE",
+      "url": "http://localhost:8080/api/accounts/3",
+      "status_code": 204,
+      "expected_status": "204",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "NEG - Invalid credentials",
+      "method": "POST",
+      "url": "http://localhost:8080/api/auth/token",
+      "status_code": 400,
+      "expected_status": "400",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "NEG - Protected endpoint without token",
+      "method": "GET",
+      "url": "http://localhost:8080/api/accounts",
+      "status_code": 401,
+      "expected_status": "401",
+      "ok": true,
+      "body_snippet": ""
+    },
+    {
+      "name": "NEG - Protected endpoint with invalid token",
+      "method": "GET",
+      "url": "http://localhost:8080/api/accounts",
+      "status_code": 401,
+      "expected_status": "401",
+      "ok": true,
+      "body_snippet": ""
+    }
+  ]
+}
