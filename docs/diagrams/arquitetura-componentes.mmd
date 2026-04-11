@@ -14,6 +14,13 @@ flowchart LR
 
     F --> AC[AccountService]
     F --> TR[TransactionService]
+    F --> EP[EstornoNotificacaoPublisher]
+
+    EP --> MQ[(JMS Queue\nestorno.notificacao.queue)]
+    MQ --> EC[EstornoNotificacaoConsumer]
+    EC --> FEIGN[NotificacaoFeignClient]
+    FEIGN --> NIC[NotificacaoInternaController\n/email e /sms]
+
     A --> RT[RefreshTokenService]
     A --> AU[SecurityAuditService]
 

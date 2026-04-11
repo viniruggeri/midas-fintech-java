@@ -8,3 +8,8 @@ flowchart TD
     E1 --> V3[Valida transacao existe]
     E1 --> V4[Valida nao estornada antes]
     E1 --> M2[Cria transacao inversa e auditoria]
+    M2 --> P1[Publica evento de estorno na fila JMS]
+    P1 --> Q1[(estorno.notificacao.queue)]
+    Q1 --> C1[Consumer processa evento]
+    C1 --> N1[Feign envia email se houver emailNotificacao]
+    C1 --> N2[Feign envia SMS se houver telefoneSms]
