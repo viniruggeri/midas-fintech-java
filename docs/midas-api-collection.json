@@ -175,7 +175,7 @@
                   "  pm.response.to.have.status(201);",
                   "  const json = pm.response.json();",
                   "  pm.expect(json.id).to.exist;",
-                  "  pm.environment.set('accountId', json.id);",
+                  "  pm.collectionVariables.set('createdAccountId', json.id);",
                   "});"
                 ]
               }
@@ -217,9 +217,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/accounts/{{accountId}}",
+              "raw": "{{baseUrl}}/api/accounts/{{createdAccountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "accounts", "{{accountId}}"]
+              "path": ["api", "accounts", "{{createdAccountId}}"]
             }
           },
           "event": [
@@ -257,9 +257,9 @@
               "raw": "{\n  \"nome\": \"Conta Principal Atualizada\",\n  \"saldo\": 1500.00,\n  \"emailNotificacao\": \"contaprincipal.atualizada@midas.local\",\n  \"telefoneSms\": \"+5511998886666\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/accounts/{{accountId}}",
+              "raw": "{{baseUrl}}/api/accounts/{{createdAccountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "accounts", "{{accountId}}"]
+              "path": ["api", "accounts", "{{createdAccountId}}"]
             }
           },
           "event": [
@@ -285,9 +285,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/accounts/{{accountId}}",
+              "raw": "{{baseUrl}}/api/accounts/{{createdAccountId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "accounts", "{{accountId}}"]
+              "path": ["api", "accounts", "{{createdAccountId}}"]
             }
           },
           "event": [
@@ -321,7 +321,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"valor\": 500.00,\n  \"data\": \"2024-01-15T10:30:00\",\n  \"tipo\": \"RECEITA\",\n  \"descricao\": \"Salário mensal\",\n  \"accountId\": 1\n}"
+              "raw": "{\n  \"valor\": 500.00,\n  \"data\": \"2024-01-15T10:30:00\",\n  \"tipo\": \"RECEITA\",\n  \"descricao\": \"Salário mensal\",\n  \"accountId\": {{accountId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/transactions",
@@ -339,7 +339,7 @@
                   "  pm.response.to.have.status(201);",
                   "  const json = pm.response.json();",
                   "  pm.expect(json.id).to.exist;",
-                  "  pm.environment.set('transactionId1', json.id);",
+                  "  pm.collectionVariables.set('transactionId1', json.id);",
                   "});"
                 ]
               }
@@ -358,7 +358,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"valor\": 150.00,\n  \"data\": \"2024-01-16T14:20:00\",\n  \"tipo\": \"DESPESA\",\n  \"descricao\": \"Compras no supermercado\",\n  \"accountId\": 1\n}"
+              "raw": "{\n  \"valor\": 150.00,\n  \"data\": \"2024-01-16T14:20:00\",\n  \"tipo\": \"DESPESA\",\n  \"descricao\": \"Compras no supermercado\",\n  \"accountId\": {{accountId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/transactions",
@@ -376,7 +376,7 @@
                   "  pm.response.to.have.status(201);",
                   "  const json = pm.response.json();",
                   "  pm.expect(json.id).to.exist;",
-                  "  pm.environment.set('transactionId2', json.id);",
+                  "  pm.collectionVariables.set('transactionId2', json.id);",
                   "});"
                 ]
               }
@@ -522,7 +522,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"valor\": 600.00,\n  \"data\": \"2024-01-15T10:30:00\",\n  \"tipo\": \"RECEITA\",\n  \"descricao\": \"Salário mensal atualizado\",\n  \"accountId\": 1\n}"
+              "raw": "{\n  \"valor\": 600.00,\n  \"data\": \"2024-01-15T10:30:00\",\n  \"tipo\": \"RECEITA\",\n  \"descricao\": \"Salário mensal atualizado\",\n  \"accountId\": {{accountId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/transactions/{{transactionId1}}",
@@ -582,12 +582,12 @@
     },
     {
       "key": "username",
-      "value": "<seu_usuario>",
+      "value": "midas-admin-local",
       "type": "string"
     },
     {
       "key": "password",
-      "value": "<sua_senha>",
+      "value": "MidasLocal@Admin2026",
       "type": "string"
     },
     {
@@ -602,6 +602,11 @@
     },
     {
       "key": "accountId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "createdAccountId",
       "value": "",
       "type": "string"
     },
