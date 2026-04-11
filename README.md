@@ -254,8 +254,6 @@ Mais detalhes em `docs/mensageria-feign-estorno.md`.
 }
 ```
 
-Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
-
 ## 🧪 Testes da Aplicação
 
 ### Suíte de Testes Implementada:
