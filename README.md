@@ -304,6 +304,7 @@ Mais detalhes em `docs/mensageria-feign-estorno.md`.
 
 - Apresentação geral: [apresentação](https://youtu.be/UR1eIVgAwuE)
 - Evolução Sprint 2: [evolução sp2](https://youtu.be/IxnOknQVfv8)
+- Sprint 3: [sp3](https://youtu.be/hAST45L_tyU)
 
 Apresentação da Proposta Tecnológica
 
