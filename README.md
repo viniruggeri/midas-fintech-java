@@ -287,14 +287,6 @@ Veja mais detalhes em `docs/evolucao-sprint1-sprint2.md`.
 5. **Persistência e Recuperação de Dados Oracle/H2**
 6. **Fluxo assíncrono de notificação após estorno (JMS + Feign)**
 
-### Execução automatizada da collection (httpx)
-- Script: `docs/run_collection_httpx.py`
-- Exemplo (incluindo cenários negativos e relatório):
-
-```bash
-c:/Users/rugge_p2gkz2r/Desktop/midas-ai/midas-fintech-java/.venv/Scripts/python.exe docs/run_collection_httpx.py --collection docs/midas-api-collection.json --base-url http://localhost:8080 --run-negative --report-json docs/collection-report.json --report-md docs/collection-report.md
-```
-
 ## 📋 Cronograma de Desenvolvimento
 
 | Atividade | Responsável | Prazo | Status |
