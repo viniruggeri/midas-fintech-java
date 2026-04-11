@@ -19,6 +19,13 @@ flowchart LR
 
     F --> AC[AccountService]
     F --> TR[TransactionService]
+    F --> EP[EstornoNotificacaoPublisher]
+
+    EP --> MQ[(JMS Queue\nestorno.notificacao.queue)]
+    MQ --> EC[EstornoNotificacaoConsumer]
+    EC --> FEIGN[NotificacaoFeignClient]
+    FEIGN --> NIC[NotificacaoInternaController\n/email e /sms]
+
     A --> RT[RefreshTokenService]
     A --> AU[SecurityAuditService]
 
@@ -53,6 +60,29 @@ sequenceDiagram
     C->>Auth: POST /api/auth/logout (refreshToken)
     Auth->>RT: revogar refresh token
     Auth-->>C: 204 No Content
+
+    rect rgb(238, 248, 255)
+    note over C,RT: Fluxo assíncrono de estorno com mensageria + Feign
+    participant Admin as Admin Web
+    participant Area as AreaController
+    participant Fluxo as FluxoFinanceiroService
+    participant Pub as EstornoNotificacaoPublisher
+    participant Queue as JMS Queue
+    participant Cons as EstornoNotificacaoConsumer
+    participant Feign as NotificacaoFeignClient
+    participant Notif as NotificacaoInternaController
+
+    Admin->>Area: POST /admin/estorno (transacaoId, motivo)
+    Area->>Fluxo: estornarTransacao(...)
+    Fluxo->>Pub: publicarEstornoAprovado(...)
+    Pub->>Queue: envia EstornoNotificacaoEvent
+    Queue-->>Cons: entrega evento
+    Cons->>Feign: enviarEmail(...) se houver canal
+    Feign->>Notif: POST /internal/notificacoes/email
+    Cons->>Feign: enviarSms(...) se houver canal
+    Feign->>Notif: POST /internal/notificacoes/sms
+    Cons-->>Area: processamento assíncrono concluído
+    end
 ```
 
 ## Fluxos Funcionais FIAP
@@ -68,4 +98,9 @@ flowchart TD
     E1 --> V3[Valida transacao existe]
     E1 --> V4[Valida nao estornada antes]
     E1 --> M2[Cria transacao inversa e auditoria]
+    M2 --> P1[Publica evento de estorno na fila JMS]
+    P1 --> Q1[(estorno.notificacao.queue)]
+    Q1 --> C1[Consumer processa evento]
+    C1 --> N1[Feign envia email se houver emailNotificacao]
+    C1 --> N2[Feign envia SMS se houver telefoneSms]
 ```
