@@ -57,8 +57,7 @@ class AccountServiceImplTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> accountService.save(testAccount)
-        );
+                () -> accountService.save(testAccount));
 
         assertEquals("Nome da conta é obrigatório", exception.getMessage());
         verify(accountRepository, never()).save(any());
@@ -70,8 +69,7 @@ class AccountServiceImplTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> accountService.save(testAccount)
-        );
+                () -> accountService.save(testAccount));
 
         assertEquals("Nome da conta é obrigatório", exception.getMessage());
         verify(accountRepository, never()).save(any());
@@ -83,8 +81,7 @@ class AccountServiceImplTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> accountService.save(testAccount)
-        );
+                () -> accountService.save(testAccount));
 
         assertEquals("Já existe uma conta com este nome", exception.getMessage());
         verify(accountRepository, never()).save(any());
@@ -131,16 +128,59 @@ class AccountServiceImplTest {
         Account updatedData = new Account();
         updatedData.setNome("Conta Atualizada");
         updatedData.setSaldo(new BigDecimal("2000.00"));
+        updatedData.setEmailNotificacao("atualizada@midas.local");
+        updatedData.setTelefoneSms("+5511999990000");
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(testAccount));
+        when(accountRepository.findByNome("Conta Atualizada")).thenReturn(Optional.empty());
         when(accountRepository.save(any(Account.class))).thenReturn(testAccount);
 
         Account updatedAccount = accountService.update(1L, updatedData);
 
         assertEquals("Conta Atualizada", updatedAccount.getNome());
         assertEquals(new BigDecimal("2000.00"), updatedAccount.getSaldo());
+        assertEquals("atualizada@midas.local", updatedAccount.getEmailNotificacao());
+        assertEquals("+5511999990000", updatedAccount.getTelefoneSms());
         verify(accountRepository).findById(1L);
+        verify(accountRepository).findByNome("Conta Atualizada");
         verify(accountRepository).save(testAccount);
+    }
+
+    @Test
+    void testUpdateAccountWithDuplicateName() {
+        Account existingWithSameName = new Account();
+        existingWithSameName.setId(2L);
+        existingWithSameName.setNome("Conta Duplicada");
+
+        Account updatedData = new Account();
+        updatedData.setNome("Conta Duplicada");
+        updatedData.setSaldo(new BigDecimal("1000.00"));
+
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(testAccount));
+        when(accountRepository.findByNome("Conta Duplicada")).thenReturn(Optional.of(existingWithSameName));
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> accountService.update(1L, updatedData));
+
+        assertEquals("Já existe uma conta com este nome", exception.getMessage());
+        verify(accountRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateAccountWithNullSaldo() {
+        Account updatedData = new Account();
+        updatedData.setNome("Conta Atualizada");
+        updatedData.setSaldo(null);
+
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(testAccount));
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> accountService.update(1L, updatedData));
+
+        assertEquals("Saldo da conta é obrigatório", exception.getMessage());
+        verify(accountRepository, never()).save(any());
     }
 
     @Test
@@ -152,8 +192,7 @@ class AccountServiceImplTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> accountService.update(999L, updatedData)
-        );
+                () -> accountService.update(999L, updatedData));
 
         assertEquals("Conta não encontrada", exception.getMessage());
         verify(accountRepository, never()).save(any());
@@ -175,8 +214,7 @@ class AccountServiceImplTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> accountService.deleteById(999L)
-        );
+                () -> accountService.deleteById(999L));
 
         assertEquals("Conta não encontrada", exception.getMessage());
         verify(accountRepository, never()).deleteById(any());

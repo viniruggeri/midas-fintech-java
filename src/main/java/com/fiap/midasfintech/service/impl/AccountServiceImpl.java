@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,14 +20,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account save(Account account) {
-        if (account.getNome() == null || account.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome da conta é obrigatório");
-        }
-
-        Optional<Account> existingAccount = accountRepository.findByNome(account.getNome());
-        if (existingAccount.isPresent()) {
-            throw new IllegalArgumentException("Já existe uma conta com este nome");
-        }
+        validateAccountPayload(account);
+        String normalizedName = account.getNome().trim();
+        validateUniqueName(normalizedName, null);
+        account.setNome(normalizedName);
 
         return accountRepository.save(account);
     }
@@ -48,8 +45,14 @@ public class AccountServiceImpl implements AccountService {
         Account existingAccount = accountRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada"));
 
-        existingAccount.setNome(account.getNome());
+        validateAccountPayload(account);
+        String normalizedName = account.getNome().trim();
+        validateUniqueName(normalizedName, id);
+
+        existingAccount.setNome(normalizedName);
         existingAccount.setSaldo(account.getSaldo());
+        existingAccount.setEmailNotificacao(account.getEmailNotificacao());
+        existingAccount.setTelefoneSms(account.getTelefoneSms());
 
         return accountRepository.save(existingAccount);
     }
@@ -66,5 +69,31 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     public Optional<Account> findByNome(String nome) {
         return accountRepository.findByNome(nome);
+    }
+
+    private void validateAccountPayload(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Dados da conta são obrigatórios");
+        }
+
+        if (account.getNome() == null || account.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome da conta é obrigatório");
+        }
+
+        if (account.getSaldo() == null) {
+            throw new IllegalArgumentException("Saldo da conta é obrigatório");
+        }
+
+        if (account.getSaldo().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Saldo da conta não pode ser negativo");
+        }
+    }
+
+    private void validateUniqueName(String normalizedName, Long currentAccountId) {
+        Optional<Account> existingAccount = accountRepository.findByNome(normalizedName);
+        if (existingAccount.isPresent()
+                && (currentAccountId == null || !existingAccount.get().getId().equals(currentAccountId))) {
+            throw new IllegalArgumentException("Já existe uma conta com este nome");
+        }
     }
 }
